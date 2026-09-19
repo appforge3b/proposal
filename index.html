@@ -1,1954 +1,544 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fit For Life × Club Console by AppForge • Partner Proposal</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>2verymuch — Effortless Business Execution</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest"></script>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Space+Grotesk:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
+<style>
+:root {
+  /* Strict Mondrian Palette */
+  --white: #ffffff;
+  --black: #0a0a0a;
+  --red: #df2229;
+  --blue: #0050b5;
+  --yellow: #fbd116;
+  
+  /* Layout */
+  --border-weight: 5px;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
 
-  <style>
-    :root {
-      --lime: #CCFF00;
-      --lime-hover: #b8e600;
-      --lime-light: rgba(204, 255, 0, 0.15);
-      --bg: #FBFBFB;
-      --card-bg: #FFFFFF;
-      --border: rgba(0, 0, 0, 0.12);
-      --dark: #0A0A0C;
-    }
+* { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0;
+}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+html { 
+  scroll-behavior: smooth; 
+  background-color: var(--white);
+}
 
-    html {
-      scroll-behavior: smooth;
-    }
+body {
+  color: var(--black);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  padding: clamp(10px, 3vw, 40px);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
-    body {
-      background-color: var(--bg);
-      color: #000000;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      line-height: 1.5;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
+.master-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--border-weight);
+  background-color: var(--black); /* The gap reveals the black background, creating perfect grid lines */
+  border: var(--border-weight) solid var(--black);
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-shadow: 16px 16px 0px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 10;
+}
 
-    .font-display {
-      font-family: 'Playfair Display', Georgia, serif;
-    }
-    .font-mono {
-      font-family: 'Space Grotesk', monospace;
-    }
-    .font-code {
-      font-family: 'JetBrains Mono', monospace;
-    }
+.cell {
+  background-color: var(--white);
+  padding: clamp(30px, 5vw, 60px);
+  position: relative;
+  overflow: hidden;
+}
 
-    #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 99999;
-    }
+/* Color Modifiers */
+.bg-red { background-color: var(--red); color: var(--white); }
+.bg-blue { background-color: var(--blue); color: var(--white); }
+.bg-yellow { background-color: var(--yellow); color: var(--black); }
+.bg-black { background-color: var(--black); color: var(--white); }
 
-    .container {
-      max-width: 1140px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
+/* Typography */
+h1, h2, h3, h4, .brand-text {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  line-height: 1.1;
+}
 
-    /* Navigation */
-    header {
-      position: sticky;
-      top: 0;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border);
-      z-index: 50;
-      padding: 14px 0;
-    }
-    .nav-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .brand-logo {
-      width: 34px;
-      height: 34px;
-      background: #000;
-      color: var(--lime);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-    .brand-text {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      white-space: nowrap;
-    }
-    .brand-name {
-      font-size: 17px;
-      font-weight: 800;
-    }
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-    .nav-links a {
-      color: #555;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover {
-      color: #000;
-    }
-    .nav-btn {
-      background: #000;
-      color: var(--lime);
-      padding: 8px 16px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 700;
-      transition: background 0.2s;
-    }
-    .nav-btn:hover {
-      background: #222;
-    }
+/* Navigation - Now Sticky */
+.nav-cell {
+  grid-column: span 12;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px clamp(30px, 5vw, 60px);
+  
+  /* Sticky Navigation Implementation */
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  /* Simulates the grid line below the nav when it overlaps other content */
+  box-shadow: 0 var(--border-weight) 0 var(--black);
+}
 
-    /* Section Base */
-    section {
-      padding: 56px 0;
-      border-bottom: 1px solid var(--border);
-    }
-    section:last-of-type {
-      border-bottom: none;
-    }
+.brand-text {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--black);
+}
 
-    .badge {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      padding: 4px 10px;
-      border-radius: 4px;
-      background: #000;
-      color: var(--lime);
-    }
-    .badge-outline {
-      background: #fff;
-      color: #444;
-      border: 1px solid var(--border);
-    }
-    .badge-lime {
-      background: var(--lime);
-      color: #000;
-    }
+@keyframes colorLoop {
+  0%, 100% { background-color: var(--red); color: var(--white); }
+  33% { background-color: var(--yellow); color: var(--black); }
+  66% { background-color: var(--blue); color: var(--white); }
+}
 
-    .section-title {
-      font-size: 38px;
-      font-weight: 900;
-      line-height: 1.15;
-      margin-top: 10px;
-      color: #000;
-    }
-    .section-desc {
-      font-size: 15px;
-      color: #555;
-      max-width: 680px;
-      margin-top: 8px;
-      line-height: 1.6;
-    }
+.brand-badge {
+  background: var(--yellow);
+  color: var(--black);
+  padding: 4px 10px;
+  font-size: 16px;
+  border: 3px solid var(--black);
+  transform: rotate(-4deg);
+  animation: colorLoop 3s infinite;
+  transition: transform 0.2s;
+}
+.brand-text:hover .brand-badge {
+  transform: rotate(4deg) scale(1.1);
+}
 
-    /* Grids */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      margin-top: 28px;
-    }
-    .grid-12 {
-      display: grid;
-      grid-template-columns: 5fr 7fr;
-      gap: 24px;
-      margin-top: 28px;
-    }
+.nav-links {
+  display: flex;
+  gap: 32px;
+  font-weight: 700;
+  font-size: 14px;
+}
+.nav-links a {
+  color: var(--black);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -4px; width: 0%; height: 3px;
+  background: var(--red);
+  transition: width 0.3s;
+}
+.nav-links a:hover::after { width: 100%; }
 
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 28px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-    }
+/* Hero Text (Left side) */
+.hero-text-cell {
+  grid-column: span 7;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 60vh;
+}
+.hero-welcome {
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  display: inline-block;
+  background: var(--black);
+  color: var(--white);
+  padding: 6px 12px;
+  align-self: flex-start;
+}
+.hero-text-cell h1 {
+  font-size: clamp(50px, 8vw, 110px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  margin-bottom: 30px;
+}
+.hero-text-cell p {
+  font-size: clamp(18px, 2vw, 26px);
+  font-weight: 500;
+  max-width: 500px;
+  line-height: 1.4;
+}
 
-    /* ================= SCREENSHOT CSS REPLICA ================= */
-    .dashboard-preview-window {
-      background: #0d0f12;
-      border: 2px solid #000;
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
-      display: flex;
-      flex-direction: column;
-    }
-    .window-header {
-      background: #15181e;
-      padding: 10px 16px;
-      border-bottom: 1px solid #232731;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-    .window-dots {
-      display: flex;
-      gap: 6px;
-    }
-    .window-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-    }
-    .window-dot.dot-red { background: #ef4444; }
-    .window-dot.dot-yellow { background: #f59e0b; }
-    .window-dot.dot-green { background: #10b981; }
+/* Hero Art (Right side) */
+.hero-art-cell {
+  grid-column: span 5;
+  background-image: 
+    linear-gradient(var(--black) 2px, transparent 2px),
+    linear-gradient(90deg, var(--black) 2px, transparent 2px);
+  background-size: 40px 40px;
+  background-position: -2px -2px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    .window-address {
-      background: #090a0d;
-      border: 1px solid #272c38;
-      padding: 3px 12px;
-      border-radius: 6px;
-      font-family: 'Space Grotesk', monospace;
-      font-size: 11px;
-      color: #9ca3af;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+/* Our Foundation */
+.story-cell { grid-column: span 12; }
+.section-kicker {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.section-kicker::after {
+  content: '';
+  flex-grow: 1;
+  height: var(--border-weight);
+  background: var(--black);
+}
 
-    .mock-dashboard {
-      background: #08090b;
-      color: #fff;
-      padding: 16px;
-      position: relative;
-      overflow: hidden;
-      font-family: 'Inter', sans-serif;
-    }
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+.story-item h3 {
+  font-size: 20px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 3px solid var(--black);
+}
+.story-item p { font-size: 16px; line-height: 1.6; font-weight: 500; }
 
-    .mock-watermark {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      opacity: 0.12;
-    }
+/* What We Do */
+.service-cell {
+  grid-column: span 6;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 400px;
+  transition: background-color 0.4s, color 0.4s;
+  cursor: pointer;
+}
+.service-cell .icon-box {
+  width: 64px; height: 64px;
+  border: var(--border-weight) solid var(--black);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 40px;
+  background: var(--white);
+  color: var(--black);
+  transition: transform 0.3s;
+}
+.service-cell:hover .icon-box { transform: translate(6px, -6px); box-shadow: -6px 6px 0px var(--black); }
 
-    .mock-top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-      padding-bottom: 14px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      gap: 10px;
-    }
-    .mock-brand-box {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .mock-f-logo {
-      width: 32px;
-      height: 32px;
-      background: #172111;
-      border: 1px solid #2c4217;
-      border-radius: 8px;
-      color: var(--lime);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-weight: 900;
-      font-size: 17px;
-    }
-    .mock-sub-title {
-      font-size: 9px;
-      font-weight: 800;
-      color: var(--lime);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      font-family: 'Space Grotesk', monospace;
-    }
-    .mock-club-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: #fff;
-    }
-    .mock-public-btn {
-      background: #14171d;
-      border: 1px solid #2a313e;
-      color: var(--lime);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 12px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      white-space: nowrap;
-    }
+.service-cell h2 { font-size: clamp(32px, 4vw, 48px); margin-bottom: 20px; }
+.service-cell p { font-size: 18px; line-height: 1.5; font-weight: 500; margin-bottom: 40px; max-width: 400px;}
 
-    .mock-chips-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 14px;
-      position: relative;
-      z-index: 2;
-      overflow-x: auto;
-      padding-bottom: 4px;
-      scrollbar-width: none;
-    }
-    .mock-chips-row::-webkit-scrollbar {
-      display: none;
-    }
-    .mock-chip-group {
-      display: flex;
-      align-items: center;
-      background: #11141a;
-      border: 1px solid #232834;
-      border-radius: 8px;
-      padding: 2px 4px;
-      gap: 6px;
-      white-space: nowrap;
-      font-size: 10.5px;
-      color: #9aa2b1;
-    }
-    .mock-chip-btn {
-      padding: 4px 8px;
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .mock-pill-count {
-      background: #3c2a07;
-      color: #f59e0b;
-      border: 1px solid #6d4b0d;
-      padding: 1px 5px;
-      border-radius: 10px;
-      font-size: 9px;
-      font-weight: 800;
-    }
+.neo-btn {
+  align-self: flex-start;
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 800; text-transform: uppercase;
+  padding: 16px 24px;
+  background: var(--white);
+  color: var(--black);
+  border: var(--border-weight) solid var(--black);
+  text-decoration: none;
+  display: inline-flex; align-items: center; gap: 10px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 6px 6px 0px var(--black);
+}
+.neo-btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 4px 4px 0px var(--black);
+}
+.neo-btn:active {
+  transform: translate(6px, 6px);
+  box-shadow: 0px 0px 0px var(--black);
+}
 
-    .mock-headline-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-top: 18px;
-      position: relative;
-      z-index: 2;
-    }
-    .mock-h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 20px;
-      font-weight: 800;
-      color: #fff;
-    }
-    .mock-h-desc {
-      font-size: 11px;
-      color: #818a99;
-      margin-top: 2px;
-    }
-    .mock-pill-indicator {
-      background: #141c10;
-      border: 1px solid #2b4515;
-      color: var(--lime);
-      font-size: 10px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
+#service-saas:hover { background-color: var(--blue); color: var(--white); }
+#service-saas:hover .icon-box { background: var(--yellow); }
+#service-bespoke:hover { background-color: var(--yellow); color: var(--black); }
+#service-bespoke:hover .icon-box { background: var(--red); color: var(--white); }
 
-    .mock-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 14px;
-      position: relative;
-      z-index: 2;
-    }
-    .mock-card {
-      background: #11141c;
-      border: 1px solid #202634;
-      border-radius: 10px;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 86px;
-    }
-    .mock-card-tag {
-      font-family: 'Space Grotesk', monospace;
-      font-size: 8px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: var(--lime);
-      text-transform: uppercase;
-    }
-    .mock-card-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 13.5px;
-      font-weight: 700;
-      color: #fff;
-      margin: 3px 0;
-    }
-    .mock-card-info {
-      font-size: 9.5px;
-      color: #798394;
-      line-height: 1.35;
-    }
+/* How We Work */
+.how-header-cell { grid-column: span 12; padding-bottom: 0; border-bottom: 0; }
+.step-cell {
+  grid-column: span 3;
+  min-height: 320px;
+  display: flex; flex-direction: column;
+}
+.step-num {
+  font-family: var(--font-display); font-size: 48px; font-weight: 900;
+  margin-bottom: 20px;
+  -webkit-text-stroke: 2px var(--black);
+  color: transparent;
+}
+.bg-red .step-num, .bg-blue .step-num { -webkit-text-stroke: 2px var(--white); }
+.step-cell h4 { font-size: 24px; margin-bottom: 16px; }
+.step-cell p { font-size: 15px; line-height: 1.5; font-weight: 500; }
 
-    .mock-stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      margin-top: 10px;
-      position: relative;
-      z-index: 2;
-    }
-    .mock-stat-box {
-      background: #10131a;
-      border: 1px solid #202633;
-      border-radius: 8px;
-      padding: 10px;
-      text-align: center;
-    }
-    .mock-stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 22px;
-      font-weight: 900;
-      color: var(--lime);
-      line-height: 1;
-    }
-    .mock-stat-lbl {
-      font-family: 'Space Grotesk', monospace;
-      font-size: 8px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: #727c8d;
-      margin-top: 4px;
-      text-transform: uppercase;
-    }
+/* Footer */
+.footer-cell {
+  grid-column: span 12;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 30px clamp(30px, 5vw, 60px);
+  background: var(--black);
+  color: var(--white);
+}
 
-    /* ================= TIMELINE CONTAINER ================= */
-    .timeline-container {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px;
-      margin-top: 28px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-    }
-    .stepper-rail-wrap {
-      position: relative;
-      margin-bottom: 28px;
-    }
-    .mobile-rail-hint {
-      display: none;
-      font-size: 11px;
-      font-family: 'Space Grotesk', monospace;
-      color: #6b7280;
-      margin-bottom: 8px;
-      align-items: center;
-      gap: 5px;
-    }
-    .stepper-line {
-      position: absolute;
-      top: 24px;
-      left: 36px;
-      right: 36px;
-      height: 2px;
-      background: #e5e7eb;
-      z-index: 1;
-    }
-    .stepper-nodes {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
-      position: relative;
-      z-index: 2;
-    }
-    .step-pill {
-      background: #fafafa;
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 12px 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      user-select: none;
-    }
-    .step-pill:hover {
-      border-color: #000;
-      transform: translateY(-2px);
-    }
-    .step-pill.active {
-      background: var(--lime-light);
-      border: 2px solid #000;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.06);
-    }
-    .node-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .node-circle {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      background: #e5e7eb;
-      color: #000;
-      font-weight: 800;
-      font-size: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-    }
-    .step-pill.active .node-circle {
-      background: #000;
-      color: var(--lime);
-    }
-    .step-pill:last-child .node-circle {
-      background: var(--lime);
-      color: #000;
-    }
+@media (max-width: 1024px) {
+  .hero-text-cell { grid-column: span 12; min-height: 40vh; }
+  .hero-art-cell { grid-column: span 12; height: 350px; border-top: var(--border-weight) solid var(--black); }
+  .service-cell { grid-column: span 12; }
+  .step-cell { grid-column: span 6; }
+}
 
-    @keyframes celebratory-pop {
-      0% { transform: scale(1); }
-      40% { transform: scale(1.08); }
-      100% { transform: scale(1); }
-    }
-    .celebrate-pop {
-      animation: celebratory-pop 0.4s ease-out;
-    }
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .story-grid { grid-template-columns: 1fr; }
+  .step-cell { grid-column: span 12; }
+  .footer-cell { flex-direction: column; gap: 20px; text-align: center; }
+}
 
-    .node-label {
-      font-size: 11px;
-      color: #777;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-    }
-    .node-name {
-      font-size: 14px;
-      font-weight: 800;
-      color: #000;
-    }
+/* Floating Overlay & Solid Circles */
+.floating-circle-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none; 
+  overflow: hidden;
+}
 
-    .stage-inspector {
-      background: var(--dark);
-      color: #fff;
-      border-radius: 16px;
-      padding: 26px 28px;
-      display: grid;
-      grid-template-columns: 1fr 240px;
-      gap: 24px;
-      align-items: center;
-      border: 2px solid #000;
-      transition: all 0.25s ease;
-    }
-    .stage-inspector h3 {
-      font-size: 22px;
-      margin: 6px 0;
-      font-weight: 800;
-    }
-    .stage-inspector p {
-      font-size: 13px;
-      color: #bbb;
-      line-height: 1.6;
-    }
-    .deliverable-box {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 12px;
-      padding: 16px;
-    }
-    .deliverable-box .tag {
-      font-size: 9px;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .deliverable-box strong {
-      display: block;
-      color: var(--lime);
-      font-size: 13px;
-      margin-top: 4px;
-    }
+.solid-circle {
+  position: absolute;
+  border-radius: 50%;
+  border: var(--border-weight) solid var(--black);
+  box-shadow: inset -10px -10px 0px rgba(0,0,0,0.1); 
+  mix-blend-mode: normal; 
+  will-change: transform;
+  opacity: 1 !important; /* Requirement 4: Always opaque */
+}
 
-    .parallel-track {
-      background: #fafafa;
-      border: 1px dashed rgba(0,0,0,0.25);
-      border-radius: 14px;
-      padding: 18px 22px;
-      margin-top: 20px;
-    }
-    .parallel-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 6px;
-    }
-    .parallel-badge {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .dot-pulse {
-      width: 9px;
-      height: 9px;
-      background: #f59e0b;
-      border-radius: 50%;
-    }
+/* Distinct sizing matches reference design */
+.circ-red { background-color: var(--red); width: 220px; height: 220px; }
+.circ-blue { background-color: var(--blue); width: 160px; height: 160px; }
+.circ-yellow { background-color: var(--yellow); width: 120px; height: 120px; }
 
-    .callout {
-      background: #f4f4f5;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-top: 18px;
-      font-size: 13px;
-      color: #333;
-    }
-    .callout-icon {
-      width: 30px;
-      height: 30px;
-      background: #000;
-      color: var(--lime);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      flex-shrink: 0;
-    }
-
-    .price-num {
-      font-size: 44px;
-      font-weight: 900;
-      line-height: 1;
-    }
-    .checklist {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      font-size: 13px;
-    }
-    .checklist li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-    }
-
-    .live-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #000;
-      color: var(--lime);
-      padding: 2px 14px;
-      border-radius: 10px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 34px;
-      font-weight: 800;
-      vertical-align: middle;
-      transform: rotate(-1deg);
-    }
-    .live-dot {
-      width: 10px;
-      height: 10px;
-      background: var(--lime);
-      border-radius: 50%;
-    }
-
-    /* Calendar Tiles */
-    .calendar-tiles-row {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 28px;
-      margin: 36px auto 20px auto;
-      flex-wrap: wrap;
-    }
-    .calendar-stage-col {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-    .calendar-wrapper {
-      position: relative;
-      width: 220px;
-      height: 250px;
-      perspective: 1200px;
-    }
-    .calendar-card {
-      width: 100%;
-      height: 100%;
-      background: #ffffff;
-      border-radius: 16px;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.14), 0 2px 6px rgba(0, 0, 0, 0.08);
-      position: relative;
-      overflow: visible;
-      display: flex;
-      flex-direction: column;
-      border: 1px solid rgba(0, 0, 0, 0.08);
-      user-select: none;
-    }
-    .calendar-card::before {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 6px;
-      right: 6px;
-      height: 6px;
-      background: #ffffff;
-      border-radius: 0 0 14px 14px;
-      border: 1px solid rgba(0, 0, 0, 0.12);
-      border-top: none;
-      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.05);
-      z-index: -1;
-    }
-    .calendar-card::after {
-      content: '';
-      position: absolute;
-      bottom: -8px;
-      left: 12px;
-      right: 12px;
-      height: 6px;
-      background: #fafafa;
-      border-radius: 0 0 14px 14px;
-      border: 1px solid rgba(0, 0, 0, 0.14);
-      border-top: none;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
-      z-index: -2;
-    }
-    .calendar-binder {
-      position: absolute;
-      top: -10px;
-      left: 0;
-      right: 0;
-      display: flex;
-      justify-content: space-evenly;
-      padding: 0 14px;
-      z-index: 10;
-    }
-    .binder-ring {
-      width: 10px;
-      height: 22px;
-      background: linear-gradient(to right, #cfd3d8, #ffffff, #9ca3af);
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.35), inset 0 1px 1px #fff;
-    }
-    .calendar-banner {
-      height: 52px;
-      background: linear-gradient(180deg, #E62E2D 0%, #C91D1C 100%);
-      border-radius: 15px 15px 0 0;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), 0 2px 4px rgba(0,0,0,0.12);
-      position: relative;
-    }
-    .calendar-sheet {
-      flex: 1;
-      background: #ffffff;
-      border-radius: 0 0 15px 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 14px 14px 14px;
-      position: relative;
-    }
-    .cal-month {
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.18em;
-      color: #222222;
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
-    .cal-day-num {
-      font-family: 'Playfair Display', Georgia, serif;
-      font-size: 78px;
-      font-weight: 900;
-      color: #0b0b0b;
-      line-height: 0.95;
-      margin: 6px 0 4px 0;
-    }
-    .cal-weekday {
-      font-family: 'Inter', sans-serif;
-      font-size: 12px;
-      font-weight: 800;
-      letter-spacing: 0.16em;
-      color: #4b5563;
-      text-transform: uppercase;
-    }
-    .date-pick-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #ffffff;
-      border: 1px solid #d1d5db;
-      color: #111827;
-      font-family: 'Space Grotesk', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      transition: all 0.2s ease;
-      margin-top: 4px;
-    }
-    .date-pick-badge:hover {
-      background: #000;
-      color: var(--lime);
-      border-color: #000;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    .date-pick-badge input[type="date"] {
-      position: absolute;
-      opacity: 0;
-      pointer-events: auto;
-      width: 1px;
-      height: 1px;
-    }
-    .page-curl {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, transparent 50%, rgba(0, 0, 0, 0.08) 51%, rgba(0, 0, 0, 0.22) 100%);
-      border-bottom-right-radius: 15px;
-      pointer-events: none;
-    }
-    .page-curl::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 0 34px 34px;
-      border-color: transparent transparent #f3f4f6 transparent;
-      box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.18);
-      border-bottom-right-radius: 12px;
-    }
-    .flip-sheet {
-      position: absolute;
-      top: 52px;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: #ffffff;
-      border-radius: 0 0 15px 15px;
-      transform-origin: top center;
-      transform-style: preserve-3d;
-      backface-visibility: hidden;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 14px 14px 14px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.06);
-      z-index: 5;
-    }
-    .flipping {
-      animation: pageTurn3D 1.1s cubic-bezier(0.45, 0.05, 0.15, 1) forwards;
-    }
-    @keyframes pageTurn3D {
-      0% {
-        transform: rotateX(0deg);
-        box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-      }
-      50% {
-        transform: rotateX(-90deg);
-        box-shadow: 0 35px 35px rgba(0,0,0,0.22);
-      }
-      100% {
-        transform: rotateX(-180deg);
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-    .calendar-connector {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      padding: 0 8px;
-    }
-    .connector-badge {
-      background: #000;
-      color: var(--lime);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      font-weight: 800;
-      padding: 4px 10px;
-      border-radius: 9999px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-      white-space: nowrap;
-    }
-    .connector-arrow {
-      color: #9ca3af;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .calendar-meta-title {
-      font-family: 'Space Grotesk', monospace;
-      font-size: 11px;
-      font-weight: 800;
-      color: #4b5563;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-    .calendar-meta-sub {
-      font-size: 12px;
-      color: #6b7280;
-      text-align: center;
-    }
-
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 28px 0;
-      text-align: center;
-      font-size: 12px;
-      color: #888;
-      background: #fff;
-    }
-
-    /* ================= RESPONSIVE SYSTEM ================= */
-
-    /* LAPTOP (<= 1024px) */
-    @media (max-width: 1024px) {
-      .container {
-        padding: 0 20px;
-      }
-      .grid-12 {
-        grid-template-columns: 1fr;
-      }
-      .section-title {
-        font-size: 32px;
-      }
-    }
-
-    /* TABLET & MOBILE VIEWPORT OPTIMIZATIONS (<= 768px) */
-    @media (max-width: 768px) {
-      section {
-        padding: 38px 0;
-      }
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-      .nav-links a:not(.nav-btn) {
-        display: none;
-      }
-      .calendar-connector {
-        transform: rotate(90deg);
-        margin: 14px 0;
-      }
-      .calendar-tiles-row {
-        flex-direction: column;
-        gap: 20px;
-      }
-
-      /* ================= SOLVING THE TIMELINE DISCONNECTION ================= */
-      .timeline-container {
-        padding: 18px 14px;
-        margin-top: 18px;
-        border-radius: 16px;
-      }
-
-      .mobile-rail-hint {
-        display: flex;
-      }
-
-      .stepper-rail-wrap {
-        margin-bottom: 12px;
-      }
-
-      .stepper-line {
-        display: none;
-      }
-
-      /* Horizontal scrolling carousel: keeps all 5 phases on a compact swipeable rail */
-      .stepper-nodes {
-        display: flex;
-        flex-direction: row;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 8px;
-        padding-bottom: 6px;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-      }
-      .stepper-nodes::-webkit-scrollbar {
-        display: none;
-      }
-
-      .step-pill {
-        flex: 0 0 132px;
-        min-width: 132px;
-        scroll-snap-align: center;
-        padding: 10px 12px;
-        gap: 6px;
-        border-radius: 12px;
-      }
-      .step-pill.active {
-        border-width: 2px;
-      }
-
-      .node-circle {
-        width: 26px;
-        height: 26px;
-        font-size: 11px;
-        border-radius: 8px;
-      }
-      .node-label {
-        font-size: 9.5px;
-      }
-      .node-name {
-        font-size: 13px;
-      }
-
-      /* Inspector Card fits cleanly on screen directly under the selected pill */
-      .stage-inspector {
-        grid-template-columns: 1fr;
-        padding: 16px;
-        gap: 12px;
-        border-radius: 14px;
-        margin-top: 4px;
-      }
-      .stage-inspector h3 {
-        font-size: 16px;
-        line-height: 1.3;
-        margin: 4px 0;
-      }
-      .stage-inspector p {
-        font-size: 12px;
-        line-height: 1.5;
-      }
-      .deliverable-box {
-        padding: 12px;
-        border-radius: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .deliverable-box strong {
-        font-size: 12px;
-        margin-top: 0;
-      }
-
-      .parallel-track {
-        padding: 14px 16px;
-        margin-top: 14px;
-      }
-      .parallel-title {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-      }
-    }
-
-    /* SMALL SCREENS (<= 480px) */
-    @media (max-width: 480px) {
-      .container {
-        padding: 0 14px;
-      }
-      header {
-        padding: 10px 0;
-      }
-      .brand-name {
-        font-size: 14px;
-      }
-      .section-title {
-        font-size: 24px;
-      }
-      .section-desc {
-        font-size: 13.5px;
-      }
-      .card {
-        padding: 18px 16px;
-        border-radius: 14px;
-      }
-      .mock-cards-grid {
-        grid-template-columns: 1fr;
-      }
-      .mock-stats-row {
-        grid-template-columns: 1fr 1fr;
-      }
-      .mock-top-bar {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .mock-public-btn {
-        width: 100%;
-        justify-content: center;
-      }
-      .mock-headline-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-      .live-badge {
-        font-size: 22px;
-      }
-    }
-  </style>
+</style>
 </head>
-
 <body>
 
-  <canvas id="confetti-canvas"></canvas>
+  <!-- FLOATING CIRCLES LAYER -->
+  <div class="floating-circle-overlay">
+    <div class="solid-circle circ-red" id="c-red"></div>
+    <div class="solid-circle circ-blue" id="c-blue"></div>
+    <div class="solid-circle circ-yellow" id="c-yellow"></div>
+  </div>
 
-  <!-- ================= HEADER ================= -->
-  <header>
-    <div class="container nav-wrap">
-      <div class="brand">
-        <div class="brand-logo">✦</div>
-        <div class="brand-text">
-          <span class="font-display brand-name">FIT FOR LIFE</span>
-          <span class="font-mono" style="color:#aaa; font-size:12px;">×</span>
-          <span class="font-mono" style="font-weight:700; font-size:13px; letter-spacing:0.05em;">CLUB CONSOLE</span>
-        </div>
-      </div>
+  <!-- MASTER MONDRIAN GRID -->
+  <div class="master-grid">
+
+    <!-- STICKY NAVIGATION -->
+    <header class="cell nav-cell" id="main-nav">
+      <a href="#" class="brand-text">
+        2verymuch <span class="brand-badge">2vm</span>
+      </a>
       <nav class="nav-links">
-        <a href="#proposal">Proposal</a>
-        <a href="#timeline">Timeline</a>
-        <a href="#synergy">Synergy</a>
-        <a href="#commercials">Commercials</a>
-        <a href="#launch" class="nav-btn">Execution</a>
+        <a href="#story">Our Story</a>
+        <a href="#do">What We Do</a>
+        <a href="#work">How We Work</a>
       </nav>
+    </header>
+
+    <!-- HERO TEXT -->
+    <section class="cell hero-text-cell">
+      <div class="hero-welcome">Welcome to 2vm</div>
+      <h1>make day-to-day business execution effortless.</h1>
+      <p>We build sharp, highly-efficient digital workflows and operational systems designed to eliminate friction.</p>
+    </section>
+
+    <!-- HERO ART (Cage target for the circles) -->
+    <section class="cell hero-art-cell" id="hero-art-cell"></section>
+
+    <!-- OUR STORY -->
+    <section class="cell story-cell" id="story">
+      <div class="section-kicker">01 / Our Foundation</div>
+      <div class="story-grid">
+        <div class="story-item">
+          <h3>Background & Origin</h3>
+          <p>Founded by experienced IT professionals, we recognized that everyday operations were bogged down by outdated, messy processes. We set out to clean the slate.</p>
+        </div>
+        <div class="story-item">
+          <h3>Core Mission</h3>
+          <p>Building deep operational workflows that feel as precise and structural as modern architecture. No bloat, just pure utility.</p>
+        </div>
+        <div class="story-item">
+          <h3>Vision</h3>
+          <p>Bringing AI-native workflows to the forefront of your organization, making current business workflows blindingly efficient.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHAT WE DO -->
+    <div class="cell how-header-cell" id="do" style="padding-bottom: 20px;">
+      <div class="section-kicker">02 / What We Do</div>
     </div>
-  </header>
-
-  <main class="container">
-
-    <!-- ================= SECTION 1: PROPOSAL ================= -->
-    <section id="proposal">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
-        <div style="display:flex; gap:8px;">
-          <span class="badge font-mono">PRODUCT PROPOSAL</span>
-          <span class="badge badge-outline font-mono">MULTI-CENTRE READY</span>
-        </div>
-        <span class="font-mono" style="font-size:12px; color:#666; background:#eee; padding:3px 8px; border-radius:4px;">
-          fitforlife.co.in
-        </span>
+    
+    <article class="cell service-cell" id="service-saas">
+      <div>
+        <div class="icon-box"><i data-lucide="layers" size="32"></i></div>
+        <h2>SaaS Products (Club Console)</h2>
+        <p>Explore our highly-structured SaaS products for business users to digitize logic and minimize admin overheads. Ready to deploy.</p>
       </div>
+      <a href="#" class="neo-btn">Explore Console <i data-lucide="arrow-right"></i></a>
+    </article>
 
-      <h1 class="font-display section-title" style="margin-top:16px;">
-        You already have the business.<br />
-        Now let's put the <span style="text-decoration: underline; text-decoration-color: var(--lime); text-underline-offset: 6px;">digital operating layer</span> underneath it.
-      </h1>
-      <p class="section-desc">
-        Fit For Life has already built the community, expert coaching team, and multi-venue footprint across Goa. Club Console gives that scale a single, powerful operating layer.
-      </p>
-
-      <div class="grid-12">
-        <!-- Left Stats Box -->
-        <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <span class="font-mono" style="font-size:10px; font-weight:800; color:#888; letter-spacing:0.08em; display:block; margin-bottom:14px;">
-              EXISTING OPERATIONAL SCALE
-            </span>
-            <div style="background:#f9fafb; border:1px solid var(--border); border-radius:12px; padding:16px; margin-bottom:12px;">
-              <span style="font-size:12px; color:#666;">Verified Active Enrolment</span>
-              <div class="font-display" style="font-size:26px; font-weight:900; margin:2px 0;">Over 3,000 Swim Students</div>
-              <span style="font-size:11px; color:#555;">Structured coaching batches across age groups</span>
-            </div>
-            <div style="background:#f9fafb; border:1px solid var(--border); border-radius:12px; padding:16px;">
-              <span style="font-size:12px; color:#666;">Operational Footprint</span>
-              <div class="font-display" style="font-size:22px; font-weight:900; margin:2px 0;">Multiple Locations Across Goa</div>
-              <span style="font-size:11px; color:#555;">Multi-centre swimming venues and programmes</span>
-            </div>
-          </div>
-          <div style="margin-top:20px; padding-top:14px; border-top:1px solid var(--border); font-size:12px; font-weight:600; color:#444;">
-            ✓ A ready platform. Simple implementation. Long-term partnership.
-          </div>
-        </div>
-
-        <!-- Right System Box: Screen Digital Twin -->
-        <div class="dashboard-preview-window">
-          <!-- Window Top Toolbar -->
-          <div class="window-header">
-            <div class="window-dots">
-              <div class="window-dot dot-red"></div>
-              <div class="window-dot dot-yellow"></div>
-              <div class="window-dot dot-green"></div>
-            </div>
-            <div class="window-address">
-              <i data-lucide="lock" style="width:11px; height:11px; color:var(--lime);"></i>
-              <span>admin.fitforlife.co.in/suite</span>
-            </div>
-            <span class="badge badge-lime font-mono" style="font-size:8px; padding:2px 6px;">LIVE REPLICA</span>
-          </div>
-
-          <!-- Exact Admin Screenshot Recreated in Native Resilient CSS -->
-          <div class="mock-dashboard">
-            <!-- Background Court / Pitch Geometric Watermark -->
-            <svg class="mock-watermark" viewBox="0 0 800 450" fill="none" stroke="#CCFF00" stroke-width="1.5">
-              <circle cx="400" cy="225" r="160" />
-              <line x1="400" y1="0" x2="400" y2="450" />
-              <circle cx="400" cy="225" r="40" />
-              <circle cx="100" cy="225" r="90" />
-              <circle cx="700" cy="225" r="90" />
-            </svg>
-
-            <!-- Brand / Top Navigation Header -->
-            <div class="mock-top-bar">
-              <div class="mock-brand-box">
-                <div class="mock-f-logo">F</div>
-                <div>
-                  <div class="mock-sub-title">ADMIN SUITE</div>
-                  <div class="mock-club-title">Fit For Life</div>
-                </div>
-              </div>
-              <div class="mock-public-btn font-mono">
-                <span>Public Site</span>
-                <i data-lucide="arrow-up-right" style="width:13px; height:13px;"></i>
-              </div>
-            </div>
-
-            <!-- Dashboard Filter & Section Navigation Chips -->
-            <div class="mock-chips-row font-mono">
-              <div class="mock-chip-group">
-                <div class="mock-chip-btn">Roster & Triage <span class="mock-pill-count">1</span></div>
-                <div class="mock-chip-btn">Attendance & Fees</div>
-                <div class="mock-chip-btn">WhatsApp</div>
-              </div>
-              <div class="mock-chip-group">
-                <div class="mock-chip-btn">Events</div>
-                <div class="mock-chip-btn">Programs</div>
-                <div class="mock-chip-btn">Classes</div>
-                <div class="mock-chip-btn">Venues</div>
-              </div>
-              <div class="mock-chip-group">
-                <div class="mock-chip-btn">Look & Presets</div>
-                <div class="mock-chip-btn">Metrics</div>
-              </div>
-            </div>
-
-            <!-- Headline Row -->
-            <div class="mock-headline-row">
-              <div>
-                <div class="mock-h1">Admin Overview</div>
-                <div class="mock-h-desc">Your sports club at a glance. Shortcuts for high-frequency operations.</div>
-              </div>
-              <div class="mock-pill-indicator font-mono">Fit For Life</div>
-            </div>
-
-            <!-- Action Grid -->
-            <div class="mock-cards-grid">
-              <div class="mock-card">
-                <div>
-                  <div class="mock-card-tag">ROLL CALL</div>
-                  <div class="mock-card-name">Mark Attendance</div>
-                </div>
-                <div class="mock-card-info">Take roll call for today's classes on pool deck or court.</div>
-              </div>
-
-              <div class="mock-card">
-                <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-                  <div>
-                    <div class="mock-card-tag" style="color:#f59e0b;">ONBOARDING</div>
-                    <div class="mock-card-name">Join Applications</div>
-                  </div>
-                  <span class="mock-pill-count" style="margin-top:2px;">1 Pending</span>
-                </div>
-                <div class="mock-card-info">Approve or waitlist new family admissions and batch allocations.</div>
-              </div>
-
-              <div class="mock-card">
-                <div>
-                  <div class="mock-card-tag">DIRECTORY</div>
-                  <div class="mock-card-name">Member Roster</div>
-                </div>
-                <div class="mock-card-info">Search active athlete records, inspect profiles, and manage squads.</div>
-              </div>
-
-              <div class="mock-card">
-                <div>
-                  <div class="mock-card-tag">FACILITIES</div>
-                  <div class="mock-card-name">Club Venues</div>
-                </div>
-                <div class="mock-card-info">Configure training locations, map pins, and court assignments.</div>
-              </div>
-
-              <div class="mock-card">
-                <div>
-                  <div class="mock-card-tag">ASSESSMENTS</div>
-                  <div class="mock-card-name">Performance Results</div>
-                </div>
-                <div class="mock-card-info">Club-wide rankings, athlete personal bests, and test drill history.</div>
-              </div>
-
-              <div class="mock-card">
-                <div>
-                  <div class="mock-card-tag">VISUAL DESIGN</div>
-                  <div class="mock-card-name">Look & Presets</div>
-                </div>
-                <div class="mock-card-info">Customize theme archetypes, hero slides, colors, and live widgets.</div>
-              </div>
-            </div>
-
-            <!-- Bottom Counter Metric Strip -->
-            <div class="mock-stats-row">
-              <div class="mock-stat-box">
-                <div class="mock-stat-num">96</div>
-                <div class="mock-stat-lbl">Active Members</div>
-              </div>
-              <div class="mock-stat-box">
-                <div class="mock-stat-num">3</div>
-                <div class="mock-stat-lbl">Club Venues</div>
-              </div>
-              <div class="mock-stat-box">
-                <div class="mock-stat-num">7</div>
-                <div class="mock-stat-lbl">Programs</div>
-              </div>
-              <div class="mock-stat-box">
-                <div class="mock-stat-num">143</div>
-                <div class="mock-stat-lbl">Class Registrations</div>
-              </div>
-            </div>
-
-          </div>
-        </div>
+    <article class="cell service-cell" id="service-bespoke">
+      <div>
+        <div class="icon-box"><i data-lucide="pen-tool" size="32"></i></div>
+        <h2>Bespoke Solutions</h2>
+        <p>Tailor-made AI workflows designed precisely around your unique operational challenges and internal team structures.</p>
       </div>
-    </section>
+      <a href="#" class="neo-btn">Bring us a problem <i data-lucide="arrow-right"></i></a>
+    </article>
 
-    <!-- ================= SECTION 2: TIMELINE ================= -->
-    <section id="timeline">
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:10px; border-bottom:1px solid var(--border); padding-bottom:16px;">
-        <div>
-          <span class="badge font-mono">PHASED ROADMAP</span>
-          <h2 class="font-display section-title" style="margin-top:8px;">Implementation Timeline</h2>
-        </div>
-        <div style="text-align:right;">
-          <span class="font-mono" style="font-size:11px; color:#888; text-transform:uppercase; font-weight:700; display:block;">DEPLOYMENT STAGES</span>
-          <strong style="font-size:13px;">Countdown to Launch • 21-Day Structured Rollout</strong>
-        </div>
-      </div>
-
-      <div class="timeline-container">
-        <!-- Interactive Countdown Pipeline Rail -->
-        <div class="stepper-rail-wrap">
-          <div class="mobile-rail-hint">
-            <i data-lucide="chevrons-right" style="width:13px; height:13px; color:var(--lime); background:#000; border-radius:4px; padding:1px;"></i>
-            <span>Swipe / Tap stage to inspect</span>
-          </div>
-
-          <div class="stepper-line"></div>
-          <div class="stepper-nodes" id="pipeline-nodes">
-            
-            <div class="step-pill active" onclick="selectStep(0)">
-              <div class="node-header">
-                <div class="node-circle font-code">21</div>
-                <span class="node-label font-mono">STAGE 01</span>
-              </div>
-              <div>
-                <span class="font-mono" style="font-size:10px; color:#888; display:block;">T - 21 Days</span>
-                <span class="node-name">Enable</span>
-              </div>
-            </div>
-
-            <div class="step-pill" onclick="selectStep(1)">
-              <div class="node-header">
-                <div class="node-circle font-code">20</div>
-                <span class="node-label font-mono">STAGE 02</span>
-              </div>
-              <div>
-                <span class="font-mono" style="font-size:10px; color:#888; display:block;">T - 20 Days</span>
-                <span class="node-name">Set Up</span>
-              </div>
-            </div>
-
-            <div class="step-pill" onclick="selectStep(2)">
-              <div class="node-header">
-                <div class="node-circle font-code">10</div>
-                <span class="node-label font-mono">STAGE 03</span>
-              </div>
-              <div>
-                <span class="font-mono" style="font-size:10px; color:#888; display:block;">T - 10 Days</span>
-                <span class="node-name">Test</span>
-              </div>
-            </div>
-
-            <div class="step-pill" onclick="selectStep(3)">
-              <div class="node-header">
-                <div class="node-circle font-code">04</div>
-                <span class="node-label font-mono">STAGE 04</span>
-              </div>
-              <div>
-                <span class="font-mono" style="font-size:10px; color:#888; display:block;">T - 04 Days</span>
-                <span class="node-name">Go Live</span>
-              </div>
-            </div>
-
-            <div class="step-pill" id="launch-step-pill" onclick="selectStep(4)">
-              <div class="node-header">
-                <div class="node-circle font-code">★</div>
-                <span class="node-label font-mono" style="color:#059669;">STAGE 05</span>
-              </div>
-              <div>
-                <span class="font-mono" style="font-size:10px; color:#10b981; font-weight:700; display:block;">Day 00</span>
-                <span class="node-name" style="display:flex; align-items:center; gap:4px;">
-                  Launch <span style="font-size:12px;">🎉</span>
-                </span>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Dynamic Context Detail Card -->
-        <div class="stage-inspector" id="stage-inspector">
-          <div>
-            <div style="display:flex; align-items:center; gap:8px;">
-              <span class="badge badge-lime font-code" id="inspect-badge">STAGE 01 • T - 21 DAYS</span>
-              <span class="font-mono" style="font-size:11px; color:#aaa; text-transform:uppercase;" id="inspect-phase">PROVISIONING</span>
-            </div>
-            <h3 class="font-display" id="inspect-title">Workspace Activation & Environment Provisioning</h3>
-            <p id="inspect-desc">
-              Dedicated cloud deployment of the Fit For Life Club Console workspace. Architecture initialization, database isolation, security certificates, and environment configuration.
-            </p>
-          </div>
-          <div class="deliverable-box">
-            <div>
-              <span class="tag font-mono">KEY DELIVERABLE</span>
-              <strong id="inspect-deliverable">Dedicated URL & Root Access</strong>
-            </div>
-            <span style="font-size:11px; color:#999; display:block; margin-top:2px;" id="inspect-sub">fitforlife.co.in live</span>
-          </div>
-        </div>
-
-        <div class="parallel-track">
-          <div class="parallel-title">
-            <div class="parallel-badge font-mono">
-              <span class="dot-pulse"></span>
-              <span>Parallel Track: Additional Requirements & Custom Features</span>
-            </div>
-            <span class="font-mono" style="font-size:11px; color:#777;">Operates concurrently without blocking core launch</span>
-          </div>
-          <p style="font-size:12px; color:#666; line-height:1.5;">
-            Any bespoke modules, legacy database connectors, or specialised custom report workflows will be scoped independently and developed in tandem, ensuring your standard platform goes live without delay.
-          </p>
-        </div>
-      </div>
-
-      <div class="callout">
-        <div class="callout-icon">⚡</div>
-        <div>
-          <strong>Fast-Track Option:</strong> The Set Up phase can be completed significantly faster if student records, venue schedules, and coaching assets are provided in organized formats early in the cycle.
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= SECTION 3: SYNERGY ================= -->
-    <section id="synergy">
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:10px; border-bottom:1px solid var(--border); padding-bottom:16px;">
-        <div>
-          <span class="badge font-mono">ARCHITECTURE & SYNERGY</span>
-          <h2 class="font-display section-title" style="margin-top:8px;">Operating Synergy</h2>
-        </div>
-        <span class="font-mono" style="font-size:12px; color:#777;">Not another development project • A platform ready to configure</span>
-      </div>
-
-      <div class="grid-2">
-        <div class="card">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:16px;">
-            <span class="font-mono" style="font-size:10px; font-weight:800; color:#888;">WHAT FIT FOR LIFE BRINGS</span>
-            <span style="font-size:10px; font-weight:800; color:#047857; background:#ecfdf5; padding:2px 8px; border-radius:4px;">VERIFIED FOUNDATION</span>
-          </div>
-          <ul class="checklist">
-            <li><span>✓</span> <div><strong>Over 3,000 Swim Students</strong> with active enrolments and historical batch records.</div></li>
-            <li><span>✓</span> <div><strong>Multiple locations across Goa</strong> covering swim facilities, fitness centres, and youth academies.</div></li>
-            <li><span>✓</span> <div><strong>Experienced coaching & administrative staff</strong> managing daily poolside routines.</div></li>
-            <li><span>✓</span> <div><strong>10+ months of battle-tested operational learnings</strong>, pricing tiers, and parent expectations.</div></li>
-          </ul>
-        </div>
-
-        <div class="card">
-          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:12px; margin-bottom:16px;">
-            <span class="font-mono" style="font-size:10px; font-weight:800; color:#888;">WHAT CLUB CONSOLE ADDS</span>
-            <span class="badge badge-lime font-mono" style="font-size:9px;">DIGITAL ENGINE LAYER</span>
-          </div>
-          <ul class="checklist">
-            <li><span style="color:#000;">+</span> <div><strong>Centralised multi-location management</strong> uniting all Goa centres under one branded portal.</div></li>
-            <li><span style="color:#000;">+</span> <div><strong>Instant fee collection & reconciliation desk</strong> with 1-click WhatsApp payment reminders.</div></li>
-            <li><span style="color:#000;">+</span> <div><strong>Coach Mode check-ins</strong> for direct poolside attendance and badge progress marking.</div></li>
-            <li><span style="color:#000;">+</span> <div><strong>Seamless parent experience</strong> for schedule tracking, announcements, and digital records.</div></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="callout" style="background:#fff; margin-top:20px;">
-        <div class="brand-logo" style="width:28px; height:28px; font-size:14px;">✦</div>
-        <div style="font-size:13px; color:#444;">
-          <strong>About AppForge:</strong> We believe the best software is simple, purposeful, and built around the way people actually work.
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= SECTION 4: COMMERCIALS ================= -->
-    <section id="commercials">
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:10px; border-bottom:1px solid var(--border); padding-bottom:16px;">
-        <div>
-          <span class="badge font-mono">COMMERCIAL AGREEMENT</span>
-          <h2 class="font-display section-title" style="margin-top:8px;">Transparent Commercials</h2>
-        </div>
-      </div>
-
-      <div class="grid-12">
-        <div class="card" style="border:2px solid #000; display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <span class="badge badge-lime font-mono">FOUNDING PARTNER SUBSCRIPTION</span>
-            <div style="margin:16px 0;">
-              <div style="display:flex; align-items:baseline; gap:4px;">
-                <span class="font-display price-num">₹10,000</span>
-                <span style="color:#666; font-size:14px; font-weight:600;">/ month</span>
-              </div>
-              <span class="font-mono" style="font-size:11px; color:#888; display:block; margin-top:4px;">
-                Flat SaaS subscription • predictable operating expense
-              </span>
-            </div>
-            <p style="font-size:12px; color:#555; line-height:1.6; border-top:1px solid var(--border); padding-top:14px;">
-              Fit For Life will be an early premier founding partner with locked pricing, direct input into feature roadmaps, and priority product updates.
-            </p>
-          </div>
-          <div style="background:#f4f4f5; padding:12px; border-radius:10px; margin-top:20px;">
-            <span class="font-mono" style="font-size:9px; font-weight:800; color:#888; letter-spacing:0.06em; display:block; margin-bottom:4px;">
-              TRANSPARENT TERMS
-            </span>
-            <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:800;">
-              <span>₹0 Setup</span>
-              <span>₹0 Maintenance</span>
-              <span>₹0 Dev Fee</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
-          <div>
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border); padding-bottom:10px; margin-bottom:14px;">
-              <span class="font-mono" style="font-size:10px; font-weight:800; color:#888;">INCLUDED IN OUR PARTNERSHIP</span>
-              <span class="font-mono" style="font-size:11px; font-weight:700;">ALL GOA CENTRES INCLUDED</span>
-            </div>
-            <div class="grid-2" style="margin-top:0; gap:12px;">
-              <div style="background:#f9fafb; padding:12px; border-radius:8px;">
-                <strong style="font-size:12px; display:block;">✓ Complete Functionality</strong>
-                <span style="font-size:11px; color:#666;">All standard Club Console features.</span>
-              </div>
-              <div style="background:#f9fafb; padding:12px; border-radius:8px;">
-                <strong style="font-size:12px; display:block;">✓ Multi-Centre Scale</strong>
-                <span style="font-size:11px; color:#666;">Multiple locations across Goa.</span>
-              </div>
-              <div style="background:#f9fafb; padding:12px; border-radius:8px;">
-                <strong style="font-size:12px; display:block;">✓ Coach & Admin Portals</strong>
-                <span style="font-size:11px; color:#666;">Admin, coach, and member access.</span>
-              </div>
-              <div style="background:#f9fafb; padding:12px; border-radius:8px;">
-                <strong style="font-size:12px; display:block;">✓ Dedicated Support</strong>
-                <span style="font-size:11px; color:#666;">Ongoing updates & direct platform care.</span>
-              </div>
-            </div>
-          </div>
-
-          <div style="background:#fffbeb; border:1px solid #fde68a; border-radius:10px; padding:14px; margin-top:20px;">
-            <strong style="font-size:12px; color:#92400e; display:block; margin-bottom:2px;">
-              ⓘ Customization & Scope Note
-            </strong>
-            <p style="font-size:11px; color:#78350f; line-height:1.5;">
-              All standard features and ongoing updates are covered in the monthly subscription. Any additional requirements, bespoke integrations, or standalone tailor-made modules requested outside standard scope will need to be scoped and estimated separately upon mutual agreement.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ================= SECTION 5: READY FOR EXECUTION ================= -->
-    <section id="launch" style="text-align:center; padding:70px 0;">
-      <span class="badge font-mono">READY FOR EXECUTION</span>
-      
-      <h2 class="font-display" style="font-size:48px; font-weight:900; margin:16px 0; line-height:1.2;">
-        LET'S GET FIT FOR LIFE 
-        <span class="live-badge">
-          <span class="live-dot"></span>
-          LIVE.
-        </span>
-      </h2>
-
-      <p style="font-size:15px; color:#555; max-width:580px; margin:0 auto 30px auto; line-height:1.6;">
-        Fit For Life brings the operating experience, coaching community, and 3,000+ students. AppForge brings the platform, reliability, and product development.
-      </p>
-
-      <div class="calendar-tiles-row">
-        
-        <div class="calendar-stage-col">
-          <div class="calendar-wrapper" onclick="openStartPicker()" style="cursor:pointer;" title="Click to change Start Date">
-            <div class="calendar-card">
-              <div class="calendar-binder">
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-              </div>
-              <div class="calendar-banner"></div>
-              <div class="calendar-sheet">
-                <div class="cal-month" id="start-cal-month">SEPTEMBER</div>
-                <div class="cal-day-num" id="start-cal-day">4</div>
-                <div class="cal-weekday" id="start-cal-weekday">FRIDAY</div>
-                <div class="page-curl"></div>
-              </div>
-            </div>
-          </div>
-          
-          <div style="text-align:center;">
-            <div class="calendar-meta-title">TARGET START</div>
-            <button type="button" class="date-pick-badge" onclick="openStartPicker()">
-              <i data-lucide="calendar" style="width:13px; height:13px;"></i>
-              <span>Click to Change Date</span>
-              <input type="date" id="start-date-picker" value="2026-09-04" onchange="handleStartDateChange(this.value)" />
-            </button>
-            <div class="calendar-meta-sub" style="margin-top:6px;">Workspace Setup & Import</div>
-          </div>
-        </div>
-
-        <div class="calendar-connector">
-          <div class="connector-badge">+21 DAYS</div>
-          <div class="connector-arrow">
-            <i data-lucide="arrow-right" style="width:28px; height:28px; stroke-width:2.5;"></i>
-          </div>
-          <span style="font-size:11px; color:#9ca3af; font-family:'Space Grotesk', monospace;">Rollout Cadence</span>
-        </div>
-
-        <div class="calendar-stage-col">
-          <div class="calendar-wrapper" onclick="triggerCalendarFlip()" style="cursor:pointer;" title="Click to replay calendar page flip">
-            <div class="calendar-card">
-              <div class="calendar-binder">
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-                <div class="binder-ring"></div>
-              </div>
-              <div class="calendar-banner"></div>
-
-              <div class="calendar-sheet">
-                <div class="cal-month" id="golive-cal-month">SEPTEMBER</div>
-                <div class="cal-day-num" id="golive-cal-day" style="color:#047857;">25</div>
-                <div class="cal-weekday" id="golive-cal-weekday" style="color:#047857;">FRIDAY</div>
-                <div class="page-curl"></div>
-              </div>
-
-              <div class="flip-sheet" id="flip-page">
-                <div class="cal-month" id="flip-cal-month">SEPTEMBER</div>
-                <div class="cal-day-num" id="flip-cal-day">4</div>
-                <div class="cal-weekday" id="flip-cal-weekday">FRIDAY</div>
-                <div class="page-curl"></div>
-              </div>
-            </div>
-          </div>
-          <div style="text-align:center;">
-            <div class="calendar-meta-title" style="color:#047857;">TARGET GO-LIVE</div>
-            <div class="calendar-meta-sub">21-day countdown to rollout</div>
-          </div>
-        </div>
-
-      </div>
-
-      <div style="margin-top:36px; padding-top:20px; border-top:1px solid var(--border);">
-        <div class="font-mono" style="font-size:13px; font-weight:800; letter-spacing:0.04em;">Club Console by AppForge</div>
-        <div style="font-size:12px; color:#777; margin-top:4px;">
-          Founder Contact: <a href="mailto:founder@appforge.io" style="color:#000; font-weight:600;">founder@appforge.io</a> • <a href="mailto:appforge.3b@gmail.com" style="color:#000; font-weight:600;">appforge.3b@gmail.com</a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer>
-    <div class="container font-mono">
-      Fit For Life × Club Console by AppForge • Confidential Partner Decision Document
+    <!-- HOW WE WORK -->
+    <div class="cell how-header-cell" id="work" style="padding-bottom: 20px;">
+      <div class="section-kicker">03 / How We Work</div>
     </div>
-  </footer>
+
+    <div class="cell step-cell">
+      <div class="step-num">1</div>
+      <h4>Exploratory Chat</h4>
+      <p>An honest, direct consultation call to map out exactly where your operational friction exists today.</p>
+    </div>
+    <div class="cell step-cell bg-yellow">
+      <div class="step-num">2</div>
+      <h4>Workflow Mapping</h4>
+      <p>We architect a rigid, logical structure for your new AI-native workflow. Blank canvas to blueprint.</p>
+    </div>
+    <div class="cell step-cell bg-red">
+      <div class="step-num">3</div>
+      <h4>Prototype & Demo</h4>
+      <p>We construct a tangible, interactive prototype. You test the structure. We iterate until it fits perfectly.</p>
+    </div>
+    <div class="cell step-cell bg-blue">
+      <div class="step-num">4</div>
+      <h4>Seamless Rollout</h4>
+      <p>Full deployment into your organization with robust, hands-on support. The execution phase.</p>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="cell footer-cell">
+      <div class="brand-text" style="color: var(--white);">
+        2verymuch <span class="brand-badge" style="border-color: var(--white);">2vm</span>
+      </div>
+      <div>© 2026 2verymuch. All rights reserved. De Stijl Edition.</div>
+    </footer>
+
+  </div>
 
   <script>
     lucide.createIcons();
 
-    const steps = [
-      {
-        badge: "STAGE 01 • T - 21 DAYS",
-        phase: "PROVISIONING",
-        title: "Workspace Activation & Environment Provisioning",
-        desc: "Dedicated cloud deployment of the Fit For Life Club Console workspace. Architecture initialization, database isolation, security certificates, and environment configuration.",
-        deliverable: "Dedicated URL & Root Access",
-        sub: "fitforlife.co.in live"
-      },
-      {
-        badge: "STAGE 02 • T - 20 DAYS",
-        phase: "DATA MIGRATION",
-        title: "Student Import & Venue Roster Configuration",
-        desc: "Loading over 3,000 student profiles, Goa swim facilities, batch timings, coach rosters, fee schemes, and brand styling assets.",
-        deliverable: "Full Academy Asset Population",
-        sub: "Can accelerate with ready data"
-      },
-      {
-        badge: "STAGE 03 • T - 10 DAYS",
-        phase: "VERIFICATION",
-        title: "Operational Workflows & Role-Based Testing",
-        desc: "Joint operational simulation: coach poolside check-ins, WhatsApp broadcast triggers, dues reconciliations, and parent navigation tests.",
-        deliverable: "Operational Readiness Sign-off",
-        sub: "Staff walkthrough complete"
-      },
-      {
-        badge: "STAGE 04 • T - 04 DAYS",
-        phase: "PRODUCTION LOCK",
-        title: "Final Verification & Go Live Authorization",
-        desc: "Admin polish, security confirmation, database integrity audit, and final operational authorization before publishing access credentials.",
-        deliverable: "Locked Production Environment",
-        sub: "Ready for community onboarding"
-      },
-      {
-        badge: "STAGE 05 • LAUNCH DAY",
-        phase: "COMMUNITY ONBOARDING",
-        title: "Public Access Broadcast Across Goa",
-        desc: "Roll out live system access to all parents, active swimmers, and poolside coaches across all Goa locations with dedicated launch support.",
-        deliverable: "100% Operational Adoption",
-        sub: "Assisted support active"
-      }
+    // Physics Entity Properties
+    const circleElements = [
+      { el: document.getElementById('c-red'), size: 220, offsetX: 0, offsetY: 0, speedX: 0.0012, speedY: 0.0014 },
+      { el: document.getElementById('c-blue'), size: 160, offsetX: Math.PI / 2, offsetY: Math.PI / 3, speedX: 0.0016, speedY: 0.0011 },
+      { el: document.getElementById('c-yellow'), size: 120, offsetX: Math.PI, offsetY: Math.PI / 1.5, speedX: 0.0010, speedY: 0.0018 }
     ];
 
-    function selectStep(index) {
-      const data = steps[index];
-      if (!data) return;
+    const heroBox = document.getElementById('hero-art-cell');
+    const navBar = document.getElementById('main-nav');
+    
+    // Lerp helper for smooth boundary transitions
+    function lerp(start, end, amt) {
+      return (1 - amt) * start + amt * end;
+    }
 
-      document.getElementById('inspect-badge').textContent = data.badge;
-      document.getElementById('inspect-phase').textContent = data.phase;
-      document.getElementById('inspect-title').textContent = data.title;
-      document.getElementById('inspect-desc').textContent = data.desc;
-      document.getElementById('inspect-deliverable').textContent = data.deliverable;
-      document.getElementById('inspect-sub').textContent = data.sub;
+    function animateFloatingCircles() {
+      const time = performance.now();
+      
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      
+      // Get exact physical coordinates of the hero grid box and navigation
+      const rect = heroBox.getBoundingClientRect();
+      const navHeight = navBar.offsetHeight;
+      const cagePadding = 5; 
+      
+      /* 
+        REQUIREMENT 3 & 5 LOGIC: 
+        Calculate the escape trigger point.
+        The trigger happens when the top of the hero box is exactly 50% of its height 
+        above the bottom edge of the sticky nav.
+      */
+      const escapeStartOffset = navHeight - (rect.height * 0.5);
+      
+      // How far past the 50% threshold have we scrolled?
+      // When rect.top is smaller than escapeStartOffset, scrolledPast > 0.
+      const scrolledPast = escapeStartOffset - rect.top;
+      
+      // We animate the full escape transition over 400px of scroll for a smooth breakout
+      const escapeTransitionDistance = 400; 
+      
+      let rawProgress = 0;
+      if (scrolledPast > 0) {
+        rawProgress = Math.min(scrolledPast / escapeTransitionDistance, 1);
+      }
+      
+      // Smooth cubic easing for the escape
+      let easeProgress = 1 - Math.pow(1 - rawProgress, 3);
+      
+      /* 
+        Interpolate Bounding Box Constraints:
+        When caged (ease = 0): Bounds match `hero-art-cell` precisely (moving with scroll).
+        When escaped (ease = 1): Bounds span full window width, but Y-min is locked to navHeight (below nav).
+      */
+      const minX = lerp(rect.left + cagePadding, 0, easeProgress);
+      const minY = lerp(rect.top + cagePadding, navHeight, easeProgress); 
+      const maxX = lerp(rect.right - cagePadding, w, easeProgress);
+      const maxY = lerp(rect.bottom - cagePadding, h, easeProgress);
 
-      const pills = document.querySelectorAll('.step-pill');
-      pills.forEach((pill, i) => {
-        if (i === index) {
-          pill.classList.add('active');
-          if (window.innerWidth <= 768) {
-            pill.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-          }
-        } else {
-          pill.classList.remove('active');
-        }
+      circleElements.forEach(circ => {
+        // Deterministic organic bounce mapping
+        const normalX = (Math.sin(time * circ.speedX + circ.offsetX) + 1) / 2;
+        const normalY = (Math.cos(time * circ.speedY + circ.offsetY) + 1) / 2;
+
+        const availableWidth = Math.max(0, maxX - minX - circ.size);
+        const availableHeight = Math.max(0, maxY - minY - circ.size);
+        
+        // Map normal coordinates into our active bounding box
+        const finalX = minX + (normalX * availableWidth);
+        const finalY = minY + (normalY * availableHeight);
+
+        // Hardware accelerated repositioning (opacity remains locked to 1 in CSS)
+        circ.el.style.transform = `translate3d(${finalX}px, ${finalY}px, 0)`;
       });
 
-      if (index === 4) {
-        const launchPill = document.getElementById('launch-step-pill');
-        launchPill.classList.remove('celebrate-pop');
-        void launchPill.offsetWidth;
-        launchPill.classList.add('celebrate-pop');
-
-        const rect = launchPill.getBoundingClientRect();
-        const originX = rect.left + rect.width / 2;
-        const originY = rect.top + rect.height / 2;
-        fireConfetti(originX, originY);
-      }
+      requestAnimationFrame(animateFloatingCircles);
     }
 
-    const monthNames = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
-    const weekdayNames = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
-
-    function openStartPicker() {
-      const input = document.getElementById('start-date-picker');
-      if (input) {
-        if (typeof input.showPicker === 'function') {
-          input.showPicker();
-        } else {
-          input.focus();
-          input.click();
-        }
-      }
-    }
-
-    function handleStartDateChange(dateString) {
-      if (!dateString) return;
-
-      const [year, month, day] = dateString.split('-').map(Number);
-      const startDate = new Date(year, month - 1, day);
-
-      const goLiveDate = new Date(year, month - 1, day);
-      goLiveDate.setDate(goLiveDate.getDate() + 21);
-
-      document.getElementById('start-cal-month').textContent = monthNames[startDate.getMonth()];
-      document.getElementById('start-cal-day').textContent = startDate.getDate();
-      document.getElementById('start-cal-weekday').textContent = weekdayNames[startDate.getDay()];
-
-      document.getElementById('flip-cal-month').textContent = monthNames[startDate.getMonth()];
-      document.getElementById('flip-cal-day').textContent = startDate.getDate();
-      document.getElementById('flip-cal-weekday').textContent = weekdayNames[startDate.getDay()];
-
-      document.getElementById('golive-cal-month').textContent = monthNames[goLiveDate.getMonth()];
-      document.getElementById('golive-cal-day').textContent = goLiveDate.getDate();
-      document.getElementById('golive-cal-weekday').textContent = weekdayNames[goLiveDate.getDay()];
-
-      triggerCalendarFlip();
-    }
-
-    function triggerCalendarFlip() {
-      const page = document.getElementById('flip-page');
-      if (!page) return;
-      page.classList.remove('flipping');
-      void page.offsetWidth;
-      page.classList.add('flipping');
-    }
-
-    const launchSection = document.getElementById('launch');
-    let hasTriggeredFlip = false;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !hasTriggeredFlip) {
-          hasTriggeredFlip = true;
-          setTimeout(triggerCalendarFlip, 500);
-        }
-      });
-    }, { threshold: 0.35 });
-
-    if (launchSection) {
-      observer.observe(launchSection);
-    }
-
-    const canvas = document.getElementById('confetti-canvas');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animationFrameId = null;
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    function fireConfetti(x, y) {
-      resizeCanvas();
-      const originX = (x && !isNaN(x)) ? x : window.innerWidth / 2;
-      const originY = (y && !isNaN(y)) ? y : window.innerHeight / 2;
-
-      const colors = ['#CCFF00', '#B8E600', '#000000', '#10B981', '#FFFFFF', '#6EE7B7'];
-      for (let i = 0; i < 110; i++) {
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 5 + Math.random() * 9;
-        particles.push({
-          x: originX,
-          y: originY,
-          vx: Math.cos(angle) * speed,
-          vy: Math.sin(angle) * speed - 4,
-          size: 5 + Math.random() * 6,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          rotation: Math.random() * 360,
-          rotationSpeed: (Math.random() - 0.5) * 12,
-          opacity: 1,
-          gravity: 0.24,
-          drag: 0.95
-        });
-      }
-
-      if (!animationFrameId) {
-        updateConfetti();
-      }
-    }
-
-    function updateConfetti() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      for (let i = particles.length - 1; i >= 0; i--) {
-        const p = particles[i];
-        p.vx *= p.drag;
-        p.vy = p.vy * p.drag + p.gravity;
-        p.x += p.vx;
-        p.y += p.vy;
-        p.rotation += p.rotationSpeed;
-        p.opacity -= 0.013;
-
-        if (p.opacity <= 0 || p.y > canvas.height) {
-          particles.splice(i, 1);
-          continue;
-        }
-
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate((p.rotation * Math.PI) / 180);
-        ctx.globalAlpha = Math.max(0, p.opacity);
-        ctx.fillStyle = p.color;
-        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-        ctx.restore();
-      }
-
-      if (particles.length > 0) {
-        animationFrameId = requestAnimationFrame(updateConfetti);
-      } else {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
+    // Start rendering engine
+    animateFloatingCircles();
   </script>
-
 </body>
 </html>
