@@ -1,544 +1,1082 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>2verymuch — Effortless Business Execution</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2vm. - 1 + 1 = 2 VERY MUCH</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Space Grotesk & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Tone.js for Sound FX -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 
-<style>
-:root {
-  /* Strict Mondrian Palette */
-  --white: #ffffff;
-  --black: #0a0a0a;
-  --red: #df2229;
-  --blue: #0050b5;
-  --yellow: #fbd116;
-  
-  /* Layout */
-  --border-weight: 5px;
-  --font-display: 'Space Grotesk', sans-serif;
-  --font-body: 'Inter', sans-serif;
-}
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            yellow: '#FFE600',
+                            pink: '#FF007A',
+                            purple: '#7B2CBF',
+                            cyan: '#00F0FF',
+                            green: '#00FF66',
+                            orange: '#FF5722',
+                            dark: '#080811',
+                            card: '#131322',
+                            lightBg: '#F4F1EA',
+                            lightCard: '#FFFFFF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        mono: ['Space Grotesk', 'monospace']
+                    },
+                    boxShadow: {
+                        'pop': '4px 4px 0px 0px #000000',
+                        'pop-lg': '7px 7px 0px 0px #000000',
+                        'pop-pink': '5px 5px 0px 0px #FF007A',
+                        'pop-cyan': '5px 5px 0px 0px #00F0FF',
+                        'pop-yellow': '5px 5px 0px 0px #FFE600',
+                        'pop-green': '5px 5px 0px 0px #00FF66',
+                        'pop-white': '5px 5px 0px 0px #FFFFFF',
+                    }
+                }
+            }
+        }
+    </script>
 
-* { 
-  box-sizing: border-box; 
-  margin: 0; 
-  padding: 0;
-}
+    <style>
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main, #080811);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #FF007A;
+            border-radius: 5px;
+            border: 2px solid #000000;
+        }
 
-html { 
-  scroll-behavior: smooth; 
-  background-color: var(--white);
-}
+        :root {
+            --bg-main: #F4F1EA;
+            --text-main: #000000;
+            --card-bg: #FFFFFF;
+            --border-color: #000000;
+        }
 
-body {
-  color: var(--black);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-  padding: clamp(10px, 3vw, 40px);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
+        .dark {
+            --bg-main: #080811;
+            --text-main: #FFFFFF;
+            --card-bg: #131322;
+            --border-color: #000000;
+        }
 
-.master-grid {
-  display: grid;
-  grid-template-columns: repeat(12, 1fr);
-  gap: var(--border-weight);
-  background-color: var(--black); /* The gap reveals the black background, creating perfect grid lines */
-  border: var(--border-weight) solid var(--black);
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  box-shadow: 16px 16px 0px rgba(0,0,0,0.1);
-  position: relative;
-  z-index: 10;
-}
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
 
-.cell {
-  background-color: var(--white);
-  padding: clamp(30px, 5vw, 60px);
-  position: relative;
-  overflow: hidden;
-}
+        .neo-border {
+            border: 3px solid var(--border-color);
+        }
 
-/* Color Modifiers */
-.bg-red { background-color: var(--red); color: var(--white); }
-.bg-blue { background-color: var(--blue); color: var(--white); }
-.bg-yellow { background-color: var(--yellow); color: var(--black); }
-.bg-black { background-color: var(--black); color: var(--white); }
+        /* Color Cycling Animation for 2vm. Logo */
+        @keyframes logoColorShift {
+            0% { background-color: #FFE600; color: #000000; border-color: #00F0FF; }
+            25% { background-color: #FF007A; color: #FFFFFF; border-color: #FFE600; }
+            50% { background-color: #00F0FF; color: #000000; border-color: #FF007A; }
+            75% { background-color: #00FF66; color: #000000; border-color: #7B2CBF; }
+            100% { background-color: #FFE600; color: #000000; border-color: #00F0FF; }
+        }
 
-/* Typography */
-h1, h2, h3, h4, .brand-text {
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  line-height: 1.1;
-}
+        .animate-logo-cycle {
+            animation: logoColorShift 8s infinite linear;
+        }
 
-/* Navigation - Now Sticky */
-.nav-cell {
-  grid-column: span 12;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px clamp(30px, 5vw, 60px);
-  
-  /* Sticky Navigation Implementation */
-  position: sticky;
-  top: 0;
-  z-index: 200;
-  /* Simulates the grid line below the nav when it overlaps other content */
-  box-shadow: 0 var(--border-weight) 0 var(--black);
-}
+        /* Typewriter Cursor Effect */
+        .typing-cursor::after {
+            content: '█';
+            display: inline-block;
+            margin-left: 3px;
+            color: #00F0FF;
+            animation: blink 0.8s infinite;
+        }
 
-.brand-text {
-  font-size: 28px;
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  color: var(--black);
-}
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
 
-@keyframes colorLoop {
-  0%, 100% { background-color: var(--red); color: var(--white); }
-  33% { background-color: var(--yellow); color: var(--black); }
-  66% { background-color: var(--blue); color: var(--white); }
-}
+        /* Sparkle Click Particles */
+        .click-sparkle {
+            position: absolute;
+            pointer-events: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: popSparkle 0.5s ease-out forwards;
+            z-index: 9999;
+        }
 
-.brand-badge {
-  background: var(--yellow);
-  color: var(--black);
-  padding: 4px 10px;
-  font-size: 16px;
-  border: 3px solid var(--black);
-  transform: rotate(-4deg);
-  animation: colorLoop 3s infinite;
-  transition: transform 0.2s;
-}
-.brand-text:hover .brand-badge {
-  transform: rotate(4deg) scale(1.1);
-}
+        @keyframes popSparkle {
+            0% { transform: scale(1) translate(0, 0); opacity: 1; }
+            100% { transform: scale(0) translate(var(--dx), var(--dy)); opacity: 0; }
+        }
 
-.nav-links {
-  display: flex;
-  gap: 32px;
-  font-weight: 700;
-  font-size: 14px;
-}
-.nav-links a {
-  color: var(--black);
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  position: relative;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  left: 0; bottom: -4px; width: 0%; height: 3px;
-  background: var(--red);
-  transition: width 0.3s;
-}
-.nav-links a:hover::after { width: 100%; }
+        /* Solution phase card reveal transition */
+        .phase-card {
+            opacity: 0.25;
+            transform: scale(0.95) translateY(8px);
+            filter: grayscale(1);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
 
-/* Hero Text (Left side) */
-.hero-text-cell {
-  grid-column: span 7;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 60vh;
-}
-.hero-welcome {
-  font-weight: 700;
-  font-size: 16px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  display: inline-block;
-  background: var(--black);
-  color: var(--white);
-  padding: 6px 12px;
-  align-self: flex-start;
-}
-.hero-text-cell h1 {
-  font-size: clamp(50px, 8vw, 110px);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  margin-bottom: 30px;
-}
-.hero-text-cell p {
-  font-size: clamp(18px, 2vw, 26px);
-  font-weight: 500;
-  max-width: 500px;
-  line-height: 1.4;
-}
+        .phase-card.active-phase {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+            filter: grayscale(0);
+        }
 
-/* Hero Art (Right side) */
-.hero-art-cell {
-  grid-column: span 5;
-  background-image: 
-    linear-gradient(var(--black) 2px, transparent 2px),
-    linear-gradient(90deg, var(--black) 2px, transparent 2px);
-  background-size: 40px 40px;
-  background-position: -2px -2px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+        /* Animated Floating Pills in About Section */
+        @keyframes floatWobble {
+            0%, 100% { transform: translateY(0px) rotate(-1deg); }
+            50% { transform: translateY(-6px) rotate(1.5deg); }
+        }
 
-/* Our Foundation */
-.story-cell { grid-column: span 12; }
-.section-kicker {
-  font-family: var(--font-display);
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-bottom: 40px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-.section-kicker::after {
-  content: '';
-  flex-grow: 1;
-  height: var(--border-weight);
-  background: var(--black);
-}
+        .animate-float-pill-1 { animation: floatWobble 3s ease-in-out infinite; }
+        .animate-float-pill-2 { animation: floatWobble 3.5s ease-in-out infinite 0.5s; }
+        .animate-float-pill-3 { animation: floatWobble 3.2s ease-in-out infinite 1s; }
 
-.story-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
-}
-.story-item h3 {
-  font-size: 20px;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 3px solid var(--black);
-}
-.story-item p { font-size: 16px; line-height: 1.6; font-weight: 500; }
+        /* Instant Pop-in Animation for 2 VERY MUCH! */
+        @keyframes popInInstant {
+            0% { opacity: 0; transform: scale(0.5) rotate(-5deg); }
+            70% { transform: scale(1.1) rotate(1deg); }
+            100% { opacity: 1; transform: scale(1) rotate(-1deg); }
+        }
 
-/* What We Do */
-.service-cell {
-  grid-column: span 6;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 400px;
-  transition: background-color 0.4s, color 0.4s;
-  cursor: pointer;
-}
-.service-cell .icon-box {
-  width: 64px; height: 64px;
-  border: var(--border-weight) solid var(--black);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 40px;
-  background: var(--white);
-  color: var(--black);
-  transition: transform 0.3s;
-}
-.service-cell:hover .icon-box { transform: translate(6px, -6px); box-shadow: -6px 6px 0px var(--black); }
+        .animate-pop-in-instant {
+            animation: popInInstant 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
 
-.service-cell h2 { font-size: clamp(32px, 4vw, 48px); margin-bottom: 20px; }
-.service-cell p { font-size: 18px; line-height: 1.5; font-weight: 500; margin-bottom: 40px; max-width: 400px;}
-
-.neo-btn {
-  align-self: flex-start;
-  font-family: var(--font-display);
-  font-size: 16px; font-weight: 800; text-transform: uppercase;
-  padding: 16px 24px;
-  background: var(--white);
-  color: var(--black);
-  border: var(--border-weight) solid var(--black);
-  text-decoration: none;
-  display: inline-flex; align-items: center; gap: 10px;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 6px 6px 0px var(--black);
-}
-.neo-btn:hover {
-  transform: translate(2px, 2px);
-  box-shadow: 4px 4px 0px var(--black);
-}
-.neo-btn:active {
-  transform: translate(6px, 6px);
-  box-shadow: 0px 0px 0px var(--black);
-}
-
-#service-saas:hover { background-color: var(--blue); color: var(--white); }
-#service-saas:hover .icon-box { background: var(--yellow); }
-#service-bespoke:hover { background-color: var(--yellow); color: var(--black); }
-#service-bespoke:hover .icon-box { background: var(--red); color: var(--white); }
-
-/* How We Work */
-.how-header-cell { grid-column: span 12; padding-bottom: 0; border-bottom: 0; }
-.step-cell {
-  grid-column: span 3;
-  min-height: 320px;
-  display: flex; flex-direction: column;
-}
-.step-num {
-  font-family: var(--font-display); font-size: 48px; font-weight: 900;
-  margin-bottom: 20px;
-  -webkit-text-stroke: 2px var(--black);
-  color: transparent;
-}
-.bg-red .step-num, .bg-blue .step-num { -webkit-text-stroke: 2px var(--white); }
-.step-cell h4 { font-size: 24px; margin-bottom: 16px; }
-.step-cell p { font-size: 15px; line-height: 1.5; font-weight: 500; }
-
-/* Footer */
-.footer-cell {
-  grid-column: span 12;
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 30px clamp(30px, 5vw, 60px);
-  background: var(--black);
-  color: var(--white);
-}
-
-@media (max-width: 1024px) {
-  .hero-text-cell { grid-column: span 12; min-height: 40vh; }
-  .hero-art-cell { grid-column: span 12; height: 350px; border-top: var(--border-weight) solid var(--black); }
-  .service-cell { grid-column: span 12; }
-  .step-cell { grid-column: span 6; }
-}
-
-@media (max-width: 768px) {
-  .nav-links { display: none; }
-  .story-grid { grid-template-columns: 1fr; }
-  .step-cell { grid-column: span 12; }
-  .footer-cell { flex-direction: column; gap: 20px; text-align: center; }
-}
-
-/* Floating Overlay & Solid Circles */
-.floating-circle-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none; 
-  overflow: hidden;
-}
-
-.solid-circle {
-  position: absolute;
-  border-radius: 50%;
-  border: var(--border-weight) solid var(--black);
-  box-shadow: inset -10px -10px 0px rgba(0,0,0,0.1); 
-  mix-blend-mode: normal; 
-  will-change: transform;
-  opacity: 1 !important; /* Requirement 4: Always opaque */
-}
-
-/* Distinct sizing matches reference design */
-.circ-red { background-color: var(--red); width: 220px; height: 220px; }
-.circ-blue { background-color: var(--blue); width: 160px; height: 160px; }
-.circ-yellow { background-color: var(--yellow); width: 120px; height: 120px; }
-
-</style>
+        .horizontal-scroll-container {
+            scrollbar-width: thin;
+        }
+    </style>
 </head>
-<body>
+<body class="font-sans antialiased selection:bg-brand-yellow selection:text-black min-h-screen flex flex-col justify-between">
 
-  <!-- FLOATING CIRCLES LAYER -->
-  <div class="floating-circle-overlay">
-    <div class="solid-circle circ-red" id="c-red"></div>
-    <div class="solid-circle circ-blue" id="c-blue"></div>
-    <div class="solid-circle circ-yellow" id="c-yellow"></div>
-  </div>
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-brand-dark/95 backdrop-blur-md border-b-4 border-black px-4 lg:px-8 py-2.5 transition-colors">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            
+            <!-- LOGO: 2vm. with smooth color cycling -->
+            <a href="#landing" onclick="playPopSound()" class="group flex items-center gap-1.5 px-4 py-1.5 rounded-xl neo-border shadow-pop animate-logo-cycle transform hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all">
+                <span class="font-mono font-black text-2xl tracking-tighter">2vm.</span>
+                <span class="w-2.5 h-2.5 bg-brand-pink rounded-full animate-ping"></span>
+            </a>
 
-  <!-- MASTER MONDRIAN GRID -->
-  <div class="master-grid">
+            <!-- NAV LINKS -->
+            <nav class="hidden md:flex items-center space-x-1 bg-gray-100 dark:bg-black/70 p-1.5 rounded-2xl border border-black/20 dark:border-white/10">
+                <a href="#landing" onclick="playPopSound()" class="px-4 py-1.5 font-mono text-xs font-bold text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-brand-yellow hover:bg-black/5 dark:hover:bg-white/10 rounded-xl transition-all">Home</a>
+                <a href="#products" onclick="playPopSound()" class="px-4 py-1.5 font-mono text-xs font-bold text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-brand-cyan hover:bg-black/5 dark:hover:bg-white/10 rounded-xl transition-all">Products</a>
+                <a href="#solutions" onclick="playPopSound()" class="px-4 py-1.5 font-mono text-xs font-bold text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-brand-pink hover:bg-black/5 dark:hover:bg-white/10 rounded-xl transition-all">Solutions</a>
+                <a href="#about" onclick="playPopSound()" class="px-4 py-1.5 font-mono text-xs font-bold text-gray-800 dark:text-gray-200 hover:text-black dark:hover:text-brand-green hover:bg-black/5 dark:hover:bg-white/10 rounded-xl transition-all">About</a>
+            </nav>
 
-    <!-- STICKY NAVIGATION -->
-    <header class="cell nav-cell" id="main-nav">
-      <a href="#" class="brand-text">
-        2verymuch <span class="brand-badge">2vm</span>
-      </a>
-      <nav class="nav-links">
-        <a href="#story">Our Story</a>
-        <a href="#do">What We Do</a>
-        <a href="#work">How We Work</a>
-      </nav>
+            <!-- ACTION BUTTONS -->
+            <div class="flex items-center gap-2">
+                
+                <!-- LIGHT / DARK MODE TOGGLE -->
+                <button id="themeToggleBtn" onclick="toggleTheme()" class="p-2.5 bg-brand-yellow dark:bg-brand-card text-black dark:text-brand-yellow rounded-xl neo-border shadow-pop text-xs font-mono flex items-center justify-center transition-all hover:scale-105" title="Toggle Theme">
+                    <i id="themeIcon" class="fas fa-moon text-sm"></i>
+                </button>
+
+                <!-- SFX TOGGLE -->
+                <button id="soundToggle" onclick="toggleAudio()" class="p-2.5 bg-gray-100 dark:bg-brand-card hover:bg-white/20 text-black dark:text-brand-cyan rounded-xl neo-border text-xs font-mono flex items-center gap-1.5 transition-all" title="Toggle Sound FX">
+                    <i id="soundIcon" class="fas fa-volume-up"></i>
+                    <span class="hidden sm:inline font-bold">SFX</span>
+                </button>
+
+                <!-- QUICK WHATSAPP DIRECT BUTTON -->
+                <button onclick="quickWhatsAppDirect()" class="bg-brand-green hover:bg-white text-black font-extrabold px-3 py-2 rounded-xl neo-border shadow-pop hover:shadow-pop-yellow transition-all text-xs font-mono flex items-center gap-1.5">
+                    <i class="fab fa-whatsapp text-sm"></i>
+                    <span class="hidden sm:inline">QUICK HI</span>
+                </button>
+
+                <!-- SAY HELLO FORM BUTTON -->
+                <button onclick="openContactModal()" class="bg-brand-pink hover:bg-brand-yellow text-white hover:text-black font-extrabold px-3.5 py-2 rounded-xl neo-border shadow-pop hover:shadow-pop-cyan transition-all text-xs font-mono flex items-center gap-1.5">
+                    <span>SAY HELLO</span>
+                    <i class="fas fa-paper-plane text-xs"></i>
+                </button>
+
+                <!-- MOBILE MENU BUTTON -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-2 bg-gray-200 dark:bg-brand-card text-black dark:text-white rounded-xl neo-border">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- MOBILE NAV MENU -->
+        <div id="mobileMenu" class="hidden md:hidden mt-2 p-3 bg-white dark:bg-brand-card rounded-2xl border-2 border-black dark:border-white/20 flex-col space-y-2">
+            <a href="#landing" onclick="toggleMobileMenu(); playPopSound();" class="block py-1.5 font-mono font-bold text-black dark:text-brand-yellow text-sm">Home</a>
+            <a href="#products" onclick="toggleMobileMenu(); playPopSound();" class="block py-1.5 font-mono font-bold text-black dark:text-brand-cyan text-sm">Products</a>
+            <a href="#solutions" onclick="toggleMobileMenu(); playPopSound();" class="block py-1.5 font-mono font-bold text-black dark:text-brand-pink text-sm">Solutions</a>
+            <a href="#about" onclick="toggleMobileMenu(); playPopSound();" class="block py-1.5 font-mono font-bold text-black dark:text-brand-green text-sm">About</a>
+        </div>
     </header>
 
-    <!-- HERO TEXT -->
-    <section class="cell hero-text-cell">
-      <div class="hero-welcome">Welcome to 2vm</div>
-      <h1>make day-to-day business execution effortless.</h1>
-      <p>We build sharp, highly-efficient digital workflows and operational systems designed to eliminate friction.</p>
+    <section id="landing" class="relative h-[calc(100vh-68px)] max-h-[100vh] min-h-[580px] flex flex-col justify-between items-center px-4 py-3 overflow-hidden">
+        
+        <!-- Ambient Background Glows -->
+        <div class="absolute top-1/4 left-1/4 w-56 h-56 bg-brand-purple/15 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-56 h-56 bg-brand-cyan/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- Top Badge + Retype Icon Button on the Right -->
+        <div class="w-full max-w-5xl mx-auto pt-1 z-10 flex items-center justify-between">
+            <span class="bg-brand-yellow text-black font-mono font-extrabold text-[11px] sm:text-xs px-3.5 py-1 rounded-full neo-border shadow-pop transform -rotate-1">
+                🚀 AI-Native Build Engine
+            </span>
+
+            <!-- ICON-ONLY RETYPE HERO BUTTON ON THE RIGHT -->
+            <button onclick="startHeroTypingAnimation()" class="p-2.5 bg-white dark:bg-brand-card hover:bg-brand-cyan text-black dark:text-brand-cyan dark:hover:text-black rounded-xl neo-border shadow-pop transition-all flex items-center justify-center text-xs font-bold" title="Re-type Hero Text">
+                <i class="fas fa-arrows-rotate"></i>
+            </button>
+        </div>
+
+        <!-- HERO TYPING DISPLAY CONTAINER -->
+        <div class="w-full max-w-5xl mx-auto flex-1 flex flex-col justify-center items-center text-center z-10 my-auto px-2">
+            <div id="typewriterBox" class="w-full font-sans font-black leading-snug tracking-tight transition-all">
+                
+                <!-- Line 1 -->
+                <div class="text-xl sm:text-3xl md:text-4xl lg:text-5xl min-h-[1.25em] text-black dark:text-white">
+                    <span id="line1" class="typing-cursor"></span>
+                </div>
+                <!-- Line 2: 1 is you - our client, -->
+                <div class="mt-1 text-lg sm:text-2xl md:text-3xl lg:text-4xl text-brand-yellow min-h-[1.25em] font-extrabold">
+                    <span id="line2"></span>
+                </div>
+                <!-- Line 3: 1 is us - team @ 2 very much -->
+                <div class="mt-1 text-lg sm:text-2xl md:text-3xl lg:text-4xl text-brand-pink min-h-[1.25em] font-extrabold">
+                    <span id="line3"></span>
+                </div>
+                <!-- Line 4 -->
+                <div class="mt-2 text-base sm:text-xl md:text-2xl lg:text-3xl font-extrabold text-gray-800 dark:text-gray-200 min-h-[2.1em] max-w-4xl mx-auto">
+                    <span id="line4"></span>
+                </div>
+                <!-- Line 5 Grand Finale: Appears at once with high impact -->
+                <div class="mt-2 min-h-[2.3em]">
+                    <span id="line5" class="hidden text-xl sm:text-3xl md:text-5xl font-black bg-brand-pink text-brand-yellow px-5 py-2 rounded-2xl neo-border shadow-pop-cyan transform -rotate-1 tracking-tight">
+                        2 VERY MUCH!
+                    </span>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ENLARGED PROMINENT VIBE CHECK WIDGET (FULLY CENTRED READOUT) -->
+        <div class="w-full max-w-4xl mx-auto pb-3 z-10">
+            <div class="bg-white dark:bg-brand-card border-4 border-black p-3.5 sm:p-4 rounded-3xl neo-border shadow-pop-lg flex flex-col sm:flex-row items-center justify-between gap-3">
+                
+                <!-- Bigger Vibe Trigger Button -->
+                <button onclick="generateRandomVibe()" class="w-full sm:w-auto bg-brand-purple hover:bg-brand-pink text-white font-mono text-xs sm:text-sm font-extrabold px-5 py-3 rounded-2xl neo-border shadow-pop transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center gap-2 shrink-0">
+                    <i class="fas fa-dice text-brand-yellow text-base"></i>
+                    <span>VIBE CHECK 🎲</span>
+                </button>
+
+                <!-- Centrally Aligned & Full Space AI Status Display -->
+                <div class="flex-1 w-full bg-gray-100 dark:bg-black/60 border-2 border-black/30 dark:border-white/20 p-2.5 rounded-2xl text-center flex items-center justify-center px-4">
+                    <span class="font-mono text-xs text-gray-500 font-bold uppercase mr-2 shrink-0">AI Status:</span>
+                    <span id="vibeOutput" class="font-mono text-sm sm:text-base font-black text-brand-pink dark:text-brand-yellow tracking-tight w-full text-center">
+                        AI efficiency boosted by 200% 🔥
+                    </span>
+                </div>
+
+                <a href="#products" onclick="playPopSound()" class="bg-brand-yellow hover:bg-white text-black font-extrabold text-xs px-4 py-3 rounded-2xl neo-border shadow-pop transition-all flex items-center gap-1.5 font-mono shrink-0">
+                    <span>PRODUCTS</span>
+                    <i class="fas fa-arrow-down"></i>
+                </a>
+            </div>
+        </div>
+
     </section>
 
-    <!-- HERO ART (Cage target for the circles) -->
-    <section class="cell hero-art-cell" id="hero-art-cell"></section>
+    <section id="products" class="py-16 px-4 bg-gray-100 dark:bg-black/50 border-t-4 border-black relative transition-colors">
+        <div class="max-w-7xl mx-auto">
+            
+            <div class="text-center mb-10">
+                <span class="bg-brand-cyan text-black font-mono font-extrabold px-3 py-1 rounded-full neo-border text-xs inline-block mb-2">
+                    OUR SAAS PLATFORMS
+                </span>
+                <h2 class="text-3xl md:text-5xl font-black text-black dark:text-white tracking-tight">
+                    Built for Speed & AI Execution
+                </h2>
+            </div>
 
-    <!-- OUR STORY -->
-    <section class="cell story-cell" id="story">
-      <div class="section-kicker">01 / Our Foundation</div>
-      <div class="story-grid">
-        <div class="story-item">
-          <h3>Background & Origin</h3>
-          <p>Founded by experienced IT professionals, we recognized that everyday operations were bogged down by outdated, messy processes. We set out to clean the slate.</p>
+            <!-- PRODUCTS GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <!-- PRODUCT 1 -->
+                <div class="bg-white dark:bg-brand-card rounded-3xl p-6 neo-border shadow-pop hover:shadow-pop-yellow transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-brand-yellow text-black rounded-2xl neo-border flex items-center justify-center text-2xl font-black mb-4">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-black dark:text-brand-yellow bg-brand-yellow/20 px-2 py-0.5 rounded border border-brand-yellow/40">FLAGSHIP OS</span>
+                        <h3 class="text-2xl font-extrabold text-black dark:text-white mt-2 mb-2">Club Console</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-xs leading-relaxed mb-4">
+                            Central command engine for automated member workflows and engagement analytics.
+                        </p>
+                    </div>
+                    <button onclick="openProductDemo('Club Console')" class="w-full bg-brand-yellow text-black font-extrabold py-2.5 rounded-xl neo-border hover:bg-black hover:text-brand-yellow transition-colors font-mono text-xs flex items-center justify-center gap-2">
+                        <span>EXPLORE CONSOLE</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- PRODUCT 2 -->
+                <div class="bg-white dark:bg-brand-card rounded-3xl p-6 neo-border shadow-pop hover:shadow-pop-pink transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-brand-pink text-white rounded-2xl neo-border flex items-center justify-center text-2xl font-black mb-4">
+                            <i class="fas fa-network-wired"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-brand-pink bg-brand-pink/20 px-2 py-0.5 rounded border border-brand-pink/40">SCALABLE WORKFLOWS</span>
+                        <h3 class="text-2xl font-extrabold text-black dark:text-white mt-2 mb-2">Club OS</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-xs leading-relaxed mb-4">
+                            Operating system running complex organizational logic with automated AI agents.
+                        </p>
+                    </div>
+                    <button onclick="openProductDemo('Club OS')" class="w-full bg-brand-pink text-white font-extrabold py-2.5 rounded-xl neo-border hover:bg-black hover:text-brand-pink transition-colors font-mono text-xs flex items-center justify-center gap-2">
+                        <span>LAUNCH CLUB OS</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <!-- PRODUCT 3 -->
+                <div class="bg-white dark:bg-brand-card rounded-3xl p-6 neo-border shadow-pop hover:shadow-pop-cyan transition-all duration-300 transform hover:-translate-y-1 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-brand-cyan text-black rounded-2xl neo-border flex items-center justify-center text-2xl font-black mb-4">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <span class="text-xs font-mono font-bold text-black dark:text-brand-cyan bg-brand-cyan/20 px-2 py-0.5 rounded border border-brand-cyan/40">INTELLIGENT PRACTICE</span>
+                        <h3 class="text-2xl font-extrabold text-black dark:text-white mt-2 mb-2">PractixOS</h3>
+                        <p class="text-gray-700 dark:text-gray-300 text-xs leading-relaxed mb-4">
+                            Tailored operational software for continuous practice and execution loops.
+                        </p>
+                    </div>
+                    <button onclick="openProductDemo('PractixOS')" class="w-full bg-brand-cyan text-black font-extrabold py-2.5 rounded-xl neo-border hover:bg-black hover:text-brand-cyan transition-colors font-mono text-xs flex items-center justify-center gap-2">
+                        <span>TEST PRACTIXOS</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+
         </div>
-        <div class="story-item">
-          <h3>Core Mission</h3>
-          <p>Building deep operational workflows that feel as precise and structural as modern architecture. No bloat, just pure utility.</p>
-        </div>
-        <div class="story-item">
-          <h3>Vision</h3>
-          <p>Bringing AI-native workflows to the forefront of your organization, making current business workflows blindingly efficient.</p>
-        </div>
-      </div>
     </section>
 
-    <!-- WHAT WE DO -->
-    <div class="cell how-header-cell" id="do" style="padding-bottom: 20px;">
-      <div class="section-kicker">02 / What We Do</div>
-    </div>
-    
-    <article class="cell service-cell" id="service-saas">
-      <div>
-        <div class="icon-box"><i data-lucide="layers" size="32"></i></div>
-        <h2>SaaS Products (Club Console)</h2>
-        <p>Explore our highly-structured SaaS products for business users to digitize logic and minimize admin overheads. Ready to deploy.</p>
-      </div>
-      <a href="#" class="neo-btn">Explore Console <i data-lucide="arrow-right"></i></a>
-    </article>
+    <section id="solutions" class="py-16 px-4 bg-brand-lightBg dark:bg-brand-dark border-t-4 border-black relative transition-colors">
+        <div class="max-w-7xl mx-auto">
+            
+            <div class="flex flex-row items-center justify-between mb-8 gap-4">
+                <div>
+                    <span class="bg-brand-pink text-white font-mono font-extrabold px-3 py-1 rounded-full neo-border text-xs inline-block mb-1">
+                        HOW WE CALIBRATE
+                    </span>
+                    <h2 class="text-2xl md:text-4xl font-black text-black dark:text-white">
+                        We tackle business problems together.
+                    </h2>
+                </div>
+                
+                <!-- PLAY / PAUSE ICON BUTTON ON THE RIGHT -->
+                <button id="workflowToggleBtn" onclick="toggleWorkflowLoopManual()" class="p-3 bg-white dark:bg-brand-card hover:bg-brand-yellow text-black dark:text-brand-yellow dark:hover:text-black rounded-2xl neo-border shadow-pop transition-all flex items-center justify-center text-sm font-bold shrink-0" title="Play / Pause Sequence">
+                    <i id="workflowIcon" class="fas fa-pause"></i>
+                </button>
+            </div>
 
-    <article class="cell service-cell" id="service-bespoke">
-      <div>
-        <div class="icon-box"><i data-lucide="pen-tool" size="32"></i></div>
-        <h2>Bespoke Solutions</h2>
-        <p>Tailor-made AI workflows designed precisely around your unique operational challenges and internal team structures.</p>
-      </div>
-      <a href="#" class="neo-btn">Bring us a problem <i data-lucide="arrow-right"></i></a>
-    </article>
+            <!-- SINGLE LINE HORIZONTAL ROW CARDS -->
+            <div class="horizontal-scroll-container overflow-x-auto pb-4 pt-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 min-w-[300px]">
+                    
+                    <!-- PHASE 1 -->
+                    <div id="phaseCard1" class="phase-card bg-white dark:bg-brand-card p-5 rounded-2xl neo-border shadow-pop relative flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="w-8 h-8 bg-brand-yellow text-black font-mono font-black text-sm rounded-xl neo-border flex items-center justify-center">1</span>
+                                <span class="text-[10px] font-mono font-bold bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded text-black dark:text-brand-yellow">PHASE 01</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-black dark:text-white mb-1.5">Exploratory Chat</h3>
+                            <p class="text-gray-700 dark:text-gray-300 text-xs leading-normal">
+                                Honest, direct consultation call to map out operational friction.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-black/10 dark:border-white/10 text-[10px] font-mono text-gray-500">
+                            Status: <span id="p1Status" class="text-brand-yellow font-bold">Active</span>
+                        </div>
+                    </div>
 
-    <!-- HOW WE WORK -->
-    <div class="cell how-header-cell" id="work" style="padding-bottom: 20px;">
-      <div class="section-kicker">03 / How We Work</div>
+                    <!-- PHASE 2 -->
+                    <div id="phaseCard2" class="phase-card bg-white dark:bg-brand-card p-5 rounded-2xl neo-border shadow-pop relative flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="w-8 h-8 bg-brand-cyan text-black font-mono font-black text-sm rounded-xl neo-border flex items-center justify-center">2</span>
+                                <span class="text-[10px] font-mono font-bold bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded text-black dark:text-brand-cyan">PHASE 02</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-black dark:text-white mb-1.5">Workflow Mapping</h3>
+                            <p class="text-gray-700 dark:text-gray-300 text-xs leading-normal">
+                                Architecting a rigid, logical structure for your AI workflow.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-black/10 dark:border-white/10 text-[10px] font-mono text-gray-500">
+                            Status: <span id="p2Status" class="text-gray-500">Waiting...</span>
+                        </div>
+                    </div>
+
+                    <!-- PHASE 3 -->
+                    <div id="phaseCard3" class="phase-card bg-white dark:bg-brand-card p-5 rounded-2xl neo-border shadow-pop relative flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="w-8 h-8 bg-brand-pink text-white font-mono font-black text-sm rounded-xl neo-border flex items-center justify-center">3</span>
+                                <span class="text-[10px] font-mono font-bold bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded text-brand-pink">PHASE 03</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-black dark:text-white mb-1.5">Prototype & Demo</h3>
+                            <p class="text-gray-700 dark:text-gray-300 text-xs leading-normal">
+                                Constructing tangible interactive prototype to test & iterate.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-black/10 dark:border-white/10 text-[10px] font-mono text-gray-500">
+                            Status: <span id="p3Status" class="text-gray-500">Waiting...</span>
+                        </div>
+                    </div>
+
+                    <!-- PHASE 4 -->
+                    <div id="phaseCard4" class="phase-card bg-white dark:bg-brand-card p-5 rounded-2xl neo-border shadow-pop relative flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="w-8 h-8 bg-brand-green text-black font-mono font-black text-sm rounded-xl neo-border flex items-center justify-center">4</span>
+                                <span class="text-[10px] font-mono font-bold bg-black/10 dark:bg-white/10 px-2 py-0.5 rounded text-black dark:text-brand-green">PHASE 04</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-black dark:text-white mb-1.5">Seamless Rollout</h3>
+                            <p class="text-gray-700 dark:text-gray-300 text-xs leading-normal">
+                                Full deployment into your organization with hands-on support.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-2 border-t border-black/10 dark:border-white/10 text-[10px] font-mono text-gray-500">
+                            Status: <span id="p4Status" class="text-gray-500">Waiting...</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="about" class="py-16 px-4 bg-gray-100 dark:bg-black/60 border-t-4 border-black relative transition-colors">
+        <div class="max-w-5xl mx-auto">
+            <div class="bg-white dark:bg-brand-card rounded-3xl p-6 md:p-10 neo-border shadow-pop-cyan">
+                
+                <div class="text-center mb-6">
+                    <span class="bg-brand-green text-black font-mono font-extrabold px-3.5 py-1 rounded-full neo-border text-xs inline-block mb-3">
+                        ABOUT 2vm.
+                    </span>
+                    <h2 class="text-2xl md:text-4xl font-black text-black dark:text-white leading-tight max-w-3xl mx-auto">
+                        We’re living through an exciting moment in human history.
+                    </h2>
+                </div>
+
+                <p class="text-gray-700 dark:text-gray-200 text-sm md:text-base leading-relaxed text-center max-w-3xl mx-auto mb-8">
+                    AI is revolutionizing how we work, build, and do business — and it’s only getting started. At <strong class="text-brand-pink dark:text-brand-yellow">2vm.</strong>, we build apps and products using AI, collaborating directly with businesses to find where AI makes a real difference.
+                </p>
+
+                <!-- CENTER ALIGNED ANIMATED PILLS -->
+                <div class="my-8 flex flex-wrap items-center justify-center gap-3 md:gap-4 font-mono font-black text-xs md:text-sm">
+                    <div id="pill-curiosity" class="animate-float-pill-1 bg-brand-yellow text-black px-4 py-2 rounded-xl neo-border shadow-pop transform hover:scale-105 transition-all cursor-pointer select-none" onclick="togglePillActive('pill-curiosity')">
+                        ✨ CURIOSITY
+                    </div>
+                    <div id="pill-speed" class="animate-float-pill-2 bg-brand-cyan text-black px-4 py-2 rounded-xl neo-border shadow-pop transform hover:scale-105 transition-all cursor-pointer select-none" onclick="togglePillActive('pill-speed')">
+                        ⚡ SPEED
+                    </div>
+                    <div id="pill-building" class="animate-float-pill-3 bg-brand-pink text-white px-4 py-2 rounded-xl neo-border shadow-pop transform hover:scale-105 transition-all cursor-pointer select-none" onclick="togglePillActive('pill-building')">
+                        ❤️ LOVE FOR BUILDING
+                    </div>
+                </div>
+
+                <!-- INTERACTIVE PHILOSOPHY EXPLORER -->
+                <div class="mt-8 bg-gray-50 dark:bg-black/50 border-2 border-black/30 dark:border-white/20 p-5 rounded-2xl neo-border">
+                    <div class="flex flex-col md:flex-row items-center justify-between mb-4 gap-2">
+                        <span class="font-mono text-xs font-bold text-brand-pink dark:text-brand-yellow">
+                            💡 INTERACTIVE ENGINE: Tap a core pillar below
+                        </span>
+                        <span class="font-mono text-[10px] text-gray-500">Live Philosophy Matrix</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <button onclick="inspectPhilosophy(1)" class="p-3 bg-white dark:bg-brand-card hover:bg-brand-yellow/20 rounded-xl neo-border text-left transition-all">
+                            <div class="font-mono text-xs font-bold text-brand-purple dark:text-brand-cyan">01. HYPOTHESIS</div>
+                            <div class="font-extrabold text-xs text-black dark:text-white">Build First</div>
+                        </button>
+                        <button onclick="inspectPhilosophy(2)" class="p-3 bg-white dark:bg-brand-card hover:bg-brand-pink/20 rounded-xl neo-border text-left transition-all">
+                            <div class="font-mono text-xs font-bold text-brand-pink">02. EXECUTION</div>
+                            <div class="font-extrabold text-xs text-black dark:text-white">Try & Learn</div>
+                        </button>
+                        <button onclick="inspectPhilosophy(3)" class="p-3 bg-white dark:bg-brand-card hover:bg-brand-green/20 rounded-xl neo-border text-left transition-all">
+                            <div class="font-mono text-xs font-bold text-brand-green">03. EVOLUTION</div>
+                            <div class="font-extrabold text-xs text-black dark:text-white">Keep Improving</div>
+                        </button>
+                    </div>
+
+                    <!-- Dynamic Philosophy Output -->
+                    <div id="philosophyDisplay" class="mt-3 p-3 bg-white dark:bg-brand-card rounded-xl border border-black/20 dark:border-white/10 font-mono text-xs text-black dark:text-gray-200">
+                        Select a pillar above to explore 2vm.'s build engine principles!
+                    </div>
+                </div>
+
+                <!-- LARGER TYPED OUT FUTURE QUOTE -->
+                <div id="futureQuoteContainer" class="mt-10 py-6 px-4 text-center min-h-[5em] flex items-center justify-center border-2 border-dashed border-brand-purple/40 dark:border-brand-cyan/40 rounded-2xl bg-black/5 dark:bg-black/40">
+                    <p class="font-mono font-black text-lg sm:text-2xl md:text-3xl text-brand-purple dark:text-brand-cyan tracking-tight leading-snug">
+                        <span id="futureQuoteText"></span>
+                    </p>
+                </div>
+
+                <!-- SAY HELLO CALLOUT -->
+                <div class="mt-8 pt-6 border-t border-black/10 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-center sm:text-left">
+                        <h4 class="text-lg font-extrabold text-black dark:text-white">Interested in learning more?</h4>
+                        <p class="text-gray-500 dark:text-gray-400 text-xs font-mono">Say hello over WhatsApp or drop us a message.</p>
+                    </div>
+
+                    <div class="flex gap-2 w-full sm:w-auto">
+                        <button onclick="quickWhatsAppDirect()" class="flex-1 sm:flex-none bg-brand-green text-black font-extrabold text-xs px-5 py-3 rounded-xl neo-border shadow-pop hover:bg-white transition-all font-mono flex items-center justify-center gap-2">
+                            <i class="fab fa-whatsapp text-base"></i>
+                            <span>QUICK HI</span>
+                        </button>
+                        <button onclick="openContactModal()" class="flex-1 sm:flex-none bg-brand-yellow text-black font-extrabold text-xs px-5 py-3 rounded-xl neo-border shadow-pop hover:bg-white transition-all font-mono flex items-center justify-center gap-2">
+                            <span>SAY HELLO</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <div id="contactModal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        
+        <div class="bg-white dark:bg-brand-card border-4 border-black w-full max-w-lg rounded-3xl p-6 neo-border shadow-2xl relative my-auto">
+            
+            <button onclick="closeContactModal()" class="absolute top-4 right-4 w-8 h-8 bg-brand-pink text-white font-extrabold rounded-xl neo-border hover:bg-black transition-colors flex items-center justify-center">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <div class="mb-4">
+                <span class="bg-brand-yellow text-black font-mono font-extrabold px-2.5 py-0.5 rounded neo-border text-[10px]">
+                    SAY HELLO TO 2vm.
+                </span>
+                <h3 class="text-2xl font-black text-black dark:text-white mt-1">
+                    Let's Build Together
+                </h3>
+            </div>
+
+            <!-- INSTANT WHATSAPP CTA INSIDE MODAL -->
+            <div class="mb-5 bg-brand-green/20 border-2 border-brand-green rounded-xl p-3 flex items-center justify-between gap-2">
+                <div>
+                    <div class="text-xs font-bold text-black dark:text-brand-green font-mono">Want to skip forms?</div>
+                    <div class="text-[11px] text-gray-700 dark:text-gray-300">Send an instant WhatsApp message directly!</div>
+                </div>
+                <button onclick="quickWhatsAppDirect()" class="bg-brand-green text-black font-extrabold text-xs px-3 py-2 rounded-lg neo-border shadow-sm flex items-center gap-1 font-mono whitespace-nowrap">
+                    <i class="fab fa-whatsapp text-sm"></i>
+                    <span>Quick Hi</span>
+                </button>
+            </div>
+
+            <!-- FULL CONTACT FORM -->
+            <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-3">
+                <div>
+                    <label class="block font-mono text-[10px] text-brand-purple dark:text-brand-cyan font-bold uppercase mb-0.5">Your Name</label>
+                    <input type="text" id="senderName" required placeholder="Alex" class="w-full bg-gray-100 dark:bg-black/60 border-2 border-black/30 dark:border-white/20 rounded-xl px-3 py-2 text-sm text-black dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-yellow">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-mono text-[10px] text-brand-pink font-bold uppercase mb-0.5">WhatsApp Phone</label>
+                        <input type="tel" id="senderPhone" required placeholder="+123456789" class="w-full bg-gray-100 dark:bg-black/60 border-2 border-black/30 dark:border-white/20 rounded-xl px-3 py-2 text-sm text-black dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-pink">
+                    </div>
+                    <div>
+                        <label class="block font-mono text-[10px] text-brand-yellow font-bold uppercase mb-0.5">Email Address</label>
+                        <input type="email" id="senderEmail" required placeholder="alex@acme.com" class="w-full bg-gray-100 dark:bg-black/60 border-2 border-black/30 dark:border-white/20 rounded-xl px-3 py-2 text-sm text-black dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-yellow">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-mono text-[10px] text-brand-green font-bold uppercase mb-0.5">Project Interest</label>
+                    <select id="projectType" class="w-full bg-gray-100 dark:bg-black/60 border-2 border-black/30 dark:border-white/20 rounded-xl px-3 py-2 text-sm text-black dark:text-white font-sans focus:outline-none focus:border-brand-green">
+                        <option value="SaaS Platform Customization">SaaS Platform (Club OS / PractixOS)</option>
+                        <option value="Custom AI Workflow Automation">Custom AI Workflow Automation</option>
+                        <option value="New AI Product Prototype">New AI Product Prototype</option>
+                        <option value="Exploratory Chat">Exploratory Chat</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block font-mono text-[10px] text-gray-500 font-bold uppercase mb-0.5">Message / Idea</label>
+                    <textarea id="senderMessage" rows="2" required placeholder="Tell us what you want to build..." class="w-full bg-gray-100 dark:bg-black/60 border-2 border-black/30 dark:border-white/20 rounded-xl px-3 py-2 text-sm text-black dark:text-white placeholder-gray-400 focus:outline-none focus:border-brand-cyan"></textarea>
+                </div>
+
+                <div class="pt-1 flex gap-2">
+                    <button type="submit" onclick="setDispatchTarget('whatsapp')" class="flex-1 bg-brand-green text-black font-extrabold py-2.5 rounded-xl neo-border shadow-pop font-mono text-xs flex items-center justify-center gap-1.5">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>WhatsApp Form</span>
+                    </button>
+                    <button type="submit" onclick="setDispatchTarget('email')" class="flex-1 bg-brand-yellow text-black font-extrabold py-2.5 rounded-xl neo-border shadow-pop font-mono text-xs flex items-center justify-center gap-1.5">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email Form</span>
+                    </button>
+                </div>
+            </form>
+
+        </div>
     </div>
 
-    <div class="cell step-cell">
-      <div class="step-num">1</div>
-      <h4>Exploratory Chat</h4>
-      <p>An honest, direct consultation call to map out exactly where your operational friction exists today.</p>
-    </div>
-    <div class="cell step-cell bg-yellow">
-      <div class="step-num">2</div>
-      <h4>Workflow Mapping</h4>
-      <p>We architect a rigid, logical structure for your new AI-native workflow. Blank canvas to blueprint.</p>
-    </div>
-    <div class="cell step-cell bg-red">
-      <div class="step-num">3</div>
-      <h4>Prototype & Demo</h4>
-      <p>We construct a tangible, interactive prototype. You test the structure. We iterate until it fits perfectly.</p>
-    </div>
-    <div class="cell step-cell bg-blue">
-      <div class="step-num">4</div>
-      <h4>Seamless Rollout</h4>
-      <p>Full deployment into your organization with robust, hands-on support. The execution phase.</p>
-    </div>
+    <footer class="bg-white dark:bg-black py-8 border-t-4 border-black px-4 text-center transition-colors">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2 font-mono text-lg font-bold">
+                <span class="bg-brand-pink text-white px-2 py-0.5 rounded text-xs">2vm.</span>
+                <span class="text-xs text-gray-500">© 2026 2verymuch. All rights reserved.</span>
+            </div>
 
-    <!-- FOOTER -->
-    <footer class="cell footer-cell">
-      <div class="brand-text" style="color: var(--white);">
-        2verymuch <span class="brand-badge" style="border-color: var(--white);">2vm</span>
-      </div>
-      <div>© 2026 2verymuch. All rights reserved. De Stijl Edition.</div>
+            <div class="flex items-center space-x-4 text-gray-600 dark:text-gray-400 font-mono text-xs">
+                <a href="#landing" onclick="playPopSound()" class="hover:text-brand-pink">Home</a>
+                <a href="#products" onclick="playPopSound()" class="hover:text-brand-cyan">Products</a>
+                <a href="#solutions" onclick="playPopSound()" class="hover:text-brand-pink">Solutions</a>
+                <a href="#about" onclick="playPopSound()" class="hover:text-brand-green">About</a>
+            </div>
+        </div>
     </footer>
 
-  </div>
+    <script>
+        /* ----------------------------------------------------
+           1. THEME TOGGLE (DARK / LIGHT MODE)
+        ---------------------------------------------------- */
+        function toggleTheme() {
+            playPopSound();
+            const htmlEl = document.documentElement;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (htmlEl.classList.contains('dark')) {
+                htmlEl.classList.remove('dark');
+                themeIcon.className = 'fas fa-sun text-sm text-black';
+                localStorage.setItem('2vm_theme', 'light');
+            } else {
+                htmlEl.classList.add('dark');
+                themeIcon.className = 'fas fa-moon text-sm text-brand-yellow';
+                localStorage.setItem('2vm_theme', 'dark');
+            }
+        }
 
-  <script>
-    lucide.createIcons();
+        // Initialize preferred theme
+        (function initTheme() {
+            const savedTheme = localStorage.getItem('2vm_theme');
+            if (savedTheme === 'light') {
+                document.documentElement.classList.remove('dark');
+                setTimeout(() => {
+                    const themeIcon = document.getElementById('themeIcon');
+                    if (themeIcon) themeIcon.className = 'fas fa-sun text-sm text-black';
+                }, 100);
+            }
+        })();
 
-    // Physics Entity Properties
-    const circleElements = [
-      { el: document.getElementById('c-red'), size: 220, offsetX: 0, offsetY: 0, speedX: 0.0012, speedY: 0.0014 },
-      { el: document.getElementById('c-blue'), size: 160, offsetX: Math.PI / 2, offsetY: Math.PI / 3, speedX: 0.0016, speedY: 0.0011 },
-      { el: document.getElementById('c-yellow'), size: 120, offsetX: Math.PI, offsetY: Math.PI / 1.5, speedX: 0.0010, speedY: 0.0018 }
-    ];
+        /* ----------------------------------------------------
+           2. AUDIO SYNTH ENGINE (TONE.JS)
+        ---------------------------------------------------- */
+        let audioEnabled = true;
+        let synth = null;
 
-    const heroBox = document.getElementById('hero-art-cell');
-    const navBar = document.getElementById('main-nav');
-    
-    // Lerp helper for smooth boundary transitions
-    function lerp(start, end, amt) {
-      return (1 - amt) * start + amt * end;
-    }
+        function initAudio() {
+            if (!synth && window.Tone) {
+                synth = new Tone.Synth({
+                    oscillator: { type: 'sine' },
+                    envelope: { attack: 0.002, decay: 0.08, sustain: 0, release: 0.08 }
+                }).toDestination();
+                synth.volume.value = -14;
+            }
+        }
 
-    function animateFloatingCircles() {
-      const time = performance.now();
-      
-      const w = window.innerWidth;
-      const h = window.innerHeight;
-      
-      // Get exact physical coordinates of the hero grid box and navigation
-      const rect = heroBox.getBoundingClientRect();
-      const navHeight = navBar.offsetHeight;
-      const cagePadding = 5; 
-      
-      /* 
-        REQUIREMENT 3 & 5 LOGIC: 
-        Calculate the escape trigger point.
-        The trigger happens when the top of the hero box is exactly 50% of its height 
-        above the bottom edge of the sticky nav.
-      */
-      const escapeStartOffset = navHeight - (rect.height * 0.5);
-      
-      // How far past the 50% threshold have we scrolled?
-      // When rect.top is smaller than escapeStartOffset, scrolledPast > 0.
-      const scrolledPast = escapeStartOffset - rect.top;
-      
-      // We animate the full escape transition over 400px of scroll for a smooth breakout
-      const escapeTransitionDistance = 400; 
-      
-      let rawProgress = 0;
-      if (scrolledPast > 0) {
-        rawProgress = Math.min(scrolledPast / escapeTransitionDistance, 1);
-      }
-      
-      // Smooth cubic easing for the escape
-      let easeProgress = 1 - Math.pow(1 - rawProgress, 3);
-      
-      /* 
-        Interpolate Bounding Box Constraints:
-        When caged (ease = 0): Bounds match `hero-art-cell` precisely (moving with scroll).
-        When escaped (ease = 1): Bounds span full window width, but Y-min is locked to navHeight (below nav).
-      */
-      const minX = lerp(rect.left + cagePadding, 0, easeProgress);
-      const minY = lerp(rect.top + cagePadding, navHeight, easeProgress); 
-      const maxX = lerp(rect.right - cagePadding, w, easeProgress);
-      const maxY = lerp(rect.bottom - cagePadding, h, easeProgress);
+        function playPopSound() {
+            if (!audioEnabled) return;
+            try {
+                initAudio();
+                if (synth) {
+                    const notes = ['C5', 'E5', 'G5', 'B5'];
+                    synth.triggerAttackRelease(notes[Math.floor(Math.random() * notes.length)], '32n');
+                }
+            } catch(e) {}
+        }
 
-      circleElements.forEach(circ => {
-        // Deterministic organic bounce mapping
-        const normalX = (Math.sin(time * circ.speedX + circ.offsetX) + 1) / 2;
-        const normalY = (Math.cos(time * circ.speedY + circ.offsetY) + 1) / 2;
+        function playKeyClickSound() {
+            if (!audioEnabled) return;
+            try {
+                initAudio();
+                if (synth) {
+                    synth.triggerAttackRelease('A5', '64n');
+                }
+            } catch(e) {}
+        }
 
-        const availableWidth = Math.max(0, maxX - minX - circ.size);
-        const availableHeight = Math.max(0, maxY - minY - circ.size);
-        
-        // Map normal coordinates into our active bounding box
-        const finalX = minX + (normalX * availableWidth);
-        const finalY = minY + (normalY * availableHeight);
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            const icon = document.getElementById('soundIcon');
+            const toggleBtn = document.getElementById('soundToggle');
 
-        // Hardware accelerated repositioning (opacity remains locked to 1 in CSS)
-        circ.el.style.transform = `translate3d(${finalX}px, ${finalY}px, 0)`;
-      });
+            if (audioEnabled) {
+                icon.className = 'fas fa-volume-up';
+                toggleBtn.querySelector('span').innerText = 'SFX';
+                playPopSound();
+            } else {
+                icon.className = 'fas fa-volume-mute';
+                toggleBtn.querySelector('span').innerText = 'OFF';
+            }
+        }
 
-      requestAnimationFrame(animateFloatingCircles);
-    }
+        /* ----------------------------------------------------
+           3. HERO TYPING ANIMATION (LINE 5 APPEARS ALL AT ONCE FOR MAXIMUM IMPACT)
+        ---------------------------------------------------- */
+        const heroLinesData = [
+            { id: 'line1', text: '1 + 1 is not just 2 any more.', instant: false },
+            { id: 'line2', text: '1 is you - our client,', instant: false },
+            { id: 'line3', text: '1 is us - team @ 2 very much', instant: false },
+            { id: 'line4', text: 'lets build and solve using AI together, and the output that we will build together is going to be', instant: false },
+            { id: 'line5', text: '2 VERY MUCH!', instant: true } // Instant single-block reveal
+        ];
 
-    // Start rendering engine
-    animateFloatingCircles();
-  </script>
+        let typingTimeouts = [];
+
+        function startHeroTypingAnimation() {
+            playPopSound();
+            typingTimeouts.forEach(t => clearTimeout(t));
+            typingTimeouts = [];
+
+            heroLinesData.forEach(item => {
+                const el = document.getElementById(item.id);
+                if (el) {
+                    if (item.instant) {
+                        el.classList.add('hidden');
+                        el.classList.remove('animate-pop-in-instant');
+                    } else {
+                        el.innerText = '';
+                        el.classList.remove('typing-cursor');
+                    }
+                }
+            });
+
+            let currentLineIndex = 0;
+
+            function typeNextLine() {
+                if (currentLineIndex >= heroLinesData.length) {
+                    return;
+                }
+
+                const currentData = heroLinesData[currentLineIndex];
+                const el = document.getElementById(currentData.id);
+
+                // Handle Line 5: Instant reveal of "2 VERY MUCH!" all at once
+                if (currentData.instant) {
+                    el.classList.remove('hidden');
+                    el.classList.add('inline-block', 'animate-pop-in-instant');
+                    playPopSound();
+
+                    if (typeof confetti === 'function') {
+                        confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+                    }
+                    return;
+                }
+
+                // Handle Lines 1 to 4: Standard Typewriter Character-by-Character
+                el.classList.add('typing-cursor');
+                let charIndex = 0;
+                const fullText = currentData.text;
+
+                function typeChar() {
+                    if (charIndex < fullText.length) {
+                        el.innerText += fullText.charAt(charIndex);
+                        charIndex++;
+                        if (charIndex % 3 === 0) playKeyClickSound();
+                        typingTimeouts.push(setTimeout(typeChar, 35));
+                    } else {
+                        el.classList.remove('typing-cursor');
+                        currentLineIndex++;
+                        typingTimeouts.push(setTimeout(typeNextLine, 180));
+                    }
+                }
+
+                typeChar();
+            }
+
+            typeNextLine();
+        }
+
+        /* ----------------------------------------------------
+           4. SOLUTIONS: AUTO-PLAY ON SCROLL (INTERSECTION OBSERVER)
+        ---------------------------------------------------- */
+        let isWorkflowLooping = true;
+        let isWorkflowInView = false;
+        let workflowTimer = null;
+        let currentPhaseStep = 0;
+
+        const phases = [
+            { card: 'phaseCard1', status: 'p1Status' },
+            { card: 'phaseCard2', status: 'p2Status' },
+            { card: 'phaseCard3', status: 'p3Status' },
+            { card: 'phaseCard4', status: 'p4Status' }
+        ];
+
+        function stepWorkflowSequence() {
+            if (!isWorkflowInView || !isWorkflowLooping) return;
+
+            phases.forEach((p, idx) => {
+                const cardEl = document.getElementById(p.card);
+                const statusEl = document.getElementById(p.status);
+                if (idx === currentPhaseStep) {
+                    cardEl.classList.add('active-phase');
+                    statusEl.innerText = "Active Phase";
+                    statusEl.className = "text-brand-green font-bold";
+                } else {
+                    cardEl.classList.remove('active-phase');
+                    statusEl.innerText = "Waiting...";
+                    statusEl.className = "text-gray-500";
+                }
+            });
+
+            playPopSound();
+
+            currentPhaseStep = (currentPhaseStep + 1) % phases.length;
+
+            if (isWorkflowLooping && isWorkflowInView) {
+                workflowTimer = setTimeout(stepWorkflowSequence, 2000); // 2 sec interval
+            }
+        }
+
+        function toggleWorkflowLoopManual() {
+            playPopSound();
+            isWorkflowLooping = !isWorkflowLooping;
+            const icon = document.getElementById('workflowIcon');
+
+            if (isWorkflowLooping) {
+                icon.className = 'fas fa-pause';
+                stepWorkflowSequence();
+            } else {
+                icon.className = 'fas fa-play';
+                if (workflowTimer) clearTimeout(workflowTimer);
+            }
+        }
+
+        // Setup IntersectionObserver for Solutions Section
+        function setupScrollObserver() {
+            const solutionsSection = document.getElementById('solutions');
+            if (!solutionsSection) return;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        isWorkflowInView = true;
+                        if (isWorkflowLooping) {
+                            if (workflowTimer) clearTimeout(workflowTimer);
+                            stepWorkflowSequence();
+                        }
+                    } else {
+                        isWorkflowInView = false;
+                        if (workflowTimer) clearTimeout(workflowTimer);
+                    }
+                });
+            }, { threshold: 0.3 });
+
+            observer.observe(solutionsSection);
+
+            // Observer for Larger Typed Quote in About section
+            const quoteSection = document.getElementById('futureQuoteContainer');
+            if (quoteSection) {
+                let quoteTyped = false;
+                const quoteObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !quoteTyped) {
+                            quoteTyped = true;
+                            typeFutureQuote();
+                        }
+                    });
+                }, { threshold: 0.5 });
+                quoteObserver.observe(quoteSection);
+            }
+        }
+
+        /* ----------------------------------------------------
+           5. ABOUT SECTION PILL HIGHLIGHT
+        ---------------------------------------------------- */
+        function togglePillActive(pillId) {
+            playPopSound();
+            const pill = document.getElementById(pillId);
+            if (pill) {
+                pill.classList.toggle('ring-4');
+                pill.classList.toggle('ring-brand-cyan');
+                pill.classList.toggle('scale-110');
+            }
+        }
+
+        /* ----------------------------------------------------
+           6. TYPED OUT FUTURE QUOTE (LARGER FONT)
+        ---------------------------------------------------- */
+        function typeFutureQuote() {
+            const fullQuote = "The future is looking increasingly AI. We’re excited to see where it takes us.";
+            const targetEl = document.getElementById('futureQuoteText');
+            if (!targetEl) return;
+
+            targetEl.innerText = '';
+            targetEl.classList.add('typing-cursor');
+            let idx = 0;
+
+            function typeNextChar() {
+                if (idx < fullQuote.length) {
+                    targetEl.innerText += fullQuote.charAt(idx);
+                    idx++;
+                    if (idx % 4 === 0) playKeyClickSound();
+                    setTimeout(typeNextChar, 40);
+                } else {
+                    setTimeout(() => targetEl.classList.remove('typing-cursor'), 1500);
+                }
+            }
+
+            typeNextChar();
+        }
+
+        /* ----------------------------------------------------
+           7. INTERACTIVE PHILOSOPHY INSPECTOR
+        ---------------------------------------------------- */
+        function inspectPhilosophy(id) {
+            playPopSound();
+            const display = document.getElementById('philosophyDisplay');
+            if (id === 1) {
+                display.innerHTML = `<span class="text-brand-pink font-bold">✨ Hypothesis (Build First):</span> We don't spend months on whiteboards. We build working prototypes immediately to test real value.`;
+            } else if (id === 2) {
+                display.innerHTML = `<span class="text-brand-cyan font-bold">⚡ Execution (Try & Learn):</span> Quick deployment cycles allow live user feedback, sharpening AI models in real time.`;
+            } else if (id === 3) {
+                display.innerHTML = `<span class="text-brand-green font-bold">❤️ Evolution (Keep Improving):</span> Continuous improvement loops ensure your custom AI system scales flawlessly.`;
+            }
+        }
+
+        /* ----------------------------------------------------
+           8. VIBE CHECK & CONTACT DISPATCH
+        ---------------------------------------------------- */
+        let dispatchTarget = 'whatsapp';
+
+        function generateRandomVibe() {
+            playPopSound();
+            const vibes = [
+                "AI efficiency boosted by 200% 🔥",
+                "1 + 1 = 2 VERY MUCH 🚀",
+                "Moving fast & building well ⚡",
+                "Zero operational friction 💎",
+                "Curiosity + Speed = Scaled AI 🔮"
+            ];
+            const vibe = vibes[Math.floor(Math.random() * vibes.length)];
+            document.getElementById('vibeOutput').innerText = vibe;
+        }
+
+        function quickWhatsAppDirect() {
+            playPopSound();
+            const targetPhone = "1234567890";
+            const defaultText = encodeURIComponent("Hi 2vm. team! I'm interested in building AI products with you.");
+            window.open(`https://wa.me/${targetPhone}?text=${defaultText}`, '_blank');
+        }
+
+        function setDispatchTarget(target) {
+            dispatchTarget = target;
+        }
+
+        function openContactModal() {
+            playPopSound();
+            document.getElementById('contactModal').classList.remove('hidden');
+        }
+
+        function closeContactModal() {
+            playPopSound();
+            document.getElementById('contactModal').classList.add('hidden');
+        }
+
+        function openProductDemo(productName) {
+            playPopSound();
+            openContactModal();
+            document.getElementById('projectType').value = "SaaS Platform Customization";
+            document.getElementById('senderMessage').value = `Hi 2vm. team, I want to explore ${productName}.`;
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            playPopSound();
+
+            const name = document.getElementById('senderName').value;
+            const phone = document.getElementById('senderPhone').value;
+            const email = document.getElementById('senderEmail').value;
+            const project = document.getElementById('projectType').value;
+            const message = document.getElementById('senderMessage').value;
+
+            const targetPhone = "1234567890";
+
+            if (dispatchTarget === 'whatsapp') {
+                const text = encodeURIComponent(
+                    `*Hi 2vm. Team!* 👋\n\n` +
+                    `*Name:* ${name}\n` +
+                    `*Phone:* ${phone}\n` +
+                    `*Email:* ${email}\n` +
+                    `*Interest:* ${project}\n` +
+                    `*Message:* ${message}`
+                );
+                window.open(`https://wa.me/${targetPhone}?text=${text}`, '_blank');
+            } else {
+                const subject = encodeURIComponent(`New 2vm. Inquiry from ${name}`);
+                const body = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nEmail: ${email}\nProject: ${project}\nMessage: ${message}`);
+                window.location.href = `mailto:hello@2verymuch.com?subject=${subject}&body=${body}`;
+            }
+
+            closeContactModal();
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+            menu.classList.toggle('flex');
+        }
+
+        /* Subtle Click Sparkle FX */
+        document.addEventListener('click', function(e) {
+            initAudio();
+            for (let i = 0; i < 2; i++) {
+                const p = document.createElement('div');
+                p.className = 'click-sparkle';
+                p.style.left = `${e.clientX}px`;
+                p.style.top = `${e.clientY}px`;
+                p.style.backgroundColor = ['#FFE600', '#FF007A', '#00F0FF', '#00FF66'][Math.floor(Math.random() * 4)];
+                p.style.setProperty('--dx', `${(Math.random() - 0.5) * 40}px`);
+                p.style.setProperty('--dy', `${(Math.random() - 0.5) * 40}px`);
+                document.body.appendChild(p);
+                setTimeout(() => p.remove(), 500);
+            }
+        });
+
+        /* Window Load Initialization */
+        window.onload = function() {
+            startHeroTypingAnimation();
+            setupScrollObserver();
+        }
+    </script>
 </body>
 </html>
